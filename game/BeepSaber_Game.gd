@@ -71,8 +71,52 @@ var _audio_synced_after_restart := false
 
 var _in_wall := false
 
+# location to store the custom offsets on the filesystem
+const OFFSETS_FILEPATH = "user://custom_offsets.json"
+
+# custom origin for the currently playing map
+var origin_offset : float
+
 #prevents the song for starting from the start when pausing and unpausing
 var pause_position := 0.0
+
+# load custom origin offset from filesystem
+func load_offset(song_key : String) -> float:
+	var file := FileAccess.open(OFFSETS_FILEPATH, FileAccess.READ)
+	if file:
+		var text := file.get_as_text()
+		file.close()
+		var json_res := JSON.parse_string(text) as Dictionary
+		if json_res:
+			if json_res.has(song_key):
+				return json_res[song_key]
+			return 1.0
+
+	else:
+		print("WARN: Failed read offsets from %s (might not exist yet)" % OFFSETS_FILEPATH)
+
+	return 1.0
+
+# save custom origin offset to filesystem
+func save_offset(song_key : String) -> void:
+	var text := "{}"
+	var file := FileAccess.open(OFFSETS_FILEPATH, FileAccess.READ)
+	if file:
+		text = file.get_as_text()
+		file.close()
+
+	var json_res := JSON.parse_string(text) as Dictionary
+	if not json_res:
+		print("WARN: Failed to read offsets from %s" % OFFSETS_FILEPATH)
+
+	json_res[song_key] = origin_offset
+
+	file = FileAccess.open(OFFSETS_FILEPATH, FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(json_res, "   ", true))
+		file.close()
+	else:
+		print("ERROR: Failed to write offsets to %s" % OFFSETS_FILEPATH)
 
 func start_map(info: MapInfo, map_difficulty: DifficultyInfo) -> void:
 	var map_filename := info.filepath + map_difficulty.beatmap_filename
@@ -83,6 +127,9 @@ func start_map(info: MapInfo, map_difficulty: DifficultyInfo) -> void:
 	if not Map.load_beatmap(info, map_difficulty, map_data):
 		return
 	
+	origin_offset = load_offset(Map.current_info.get_key())
+	xr_origin.transform.origin.z = origin_offset
+
 	update_left_color(Map.color_left)
 	update_right_color(Map.color_right)
 	if Map.event_stack.is_empty():
@@ -108,6 +155,13 @@ func start_map(info: MapInfo, map_difficulty: DifficultyInfo) -> void:
 # This function will transitioning the game from it's current state into
 # the provided 'next_state'.
 func _transition_game_state(next_state: GameState) -> void:
+	if gamestate == gamestate_playing:
+		save_offset(Map.current_info.get_key())
+
+	if next_state == gamestate_mapselection:
+		xr_origin.transform.origin.z = 1.0
+		print("DEBUG: set origin back to 1.0")
+
 	gamestate = next_state
 	gamestate._ready(self)
 
@@ -153,6 +207,9 @@ func _check_and_update_saber(controller: BeepSaberController, saber: LightSaber)
 		else:
 			controller.simple_rumble(0.0, 0.1)
 
+	if song_player.playing and controller == left_controller:
+		origin_offset -= controller.stick_position().y * 0.02
+		xr_origin.transform.origin.z = clamp(origin_offset, 0.0, 2.0)
 
 func _physics_process(_dt: float) -> void:
 	if debug_info_label.visible:

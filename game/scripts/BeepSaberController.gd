@@ -9,6 +9,7 @@ var by := false
 var by_last_frame := false
 var trigger := false
 var trigger_last_frame := false
+var stick := Vector2.ZERO
 
 var movement_aabb := AABB()
 
@@ -39,6 +40,9 @@ func trigger_just_pressed() -> bool:
 func trigger_just_released() -> bool:
 	return trigger_last_frame and not trigger
 
+func stick_position() -> Vector2:
+	return stick
+
 func _update_buttons_and_sticks() -> void:
 	ax_last_frame = ax
 	by_last_frame = by
@@ -46,6 +50,7 @@ func _update_buttons_and_sticks() -> void:
 	ax = is_button_pressed(&"ax_button")
 	by = is_button_pressed(&"by_button")
 	trigger = is_button_pressed(&"trigger")
+	stick = get_vector2(&"primary")
 
 func _update_movement_aabb() -> void:
 	movement_aabb = movement_aabb.expand(global_transform.origin)
