@@ -89,6 +89,9 @@ func set_controls_from_settings() -> void:
 	spectator_view_control.button_pressed = Settings.spectator_view
 	spectator_hud_control.button_pressed = Settings.spectator_hud
 
+	left_saber_col.get_popup().mouse_exited.connect(_on_saber_color_mouse_exited.bind(left_saber_col))
+	right_saber_col.get_popup().mouse_exited.connect(_on_saber_color_mouse_exited.bind(right_saber_col))
+
 func _restore_defaults() -> void:
 	Settings.restore_defaults()
 	set_controls_from_settings()
@@ -105,6 +108,9 @@ func _on_left_saber_color_changed(color: Color) -> void:
 
 func _on_right_saber_color_changed(color: Color) -> void:
 	Settings.color_right = color
+
+func _on_saber_color_mouse_exited(color: ColorPickerButton) -> void:
+	color.get_popup().hide()
 
 func _on_saber_tail_toggled(button_pressed: bool) -> void:
 	Settings.saber_tail = button_pressed
