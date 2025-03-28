@@ -112,6 +112,7 @@ func _update_keyboard(dt: float) -> void:
 	var button_BY := Input.is_key_pressed(KEY_KP_7) || Input.is_key_pressed(KEY_7)
 	var button_AX := Input.is_key_pressed(KEY_KP_1) || Input.is_key_pressed(KEY_1)
 	var button_trigger := Input.is_key_pressed(KEY_KP_0) || Input.is_key_pressed(KEY_0) || Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+	var stick := Vector2(0.0, float(Input.is_key_pressed(KEY_E)) - float(Input.is_key_pressed(KEY_C)))
 	
 	vr.leftController.trigger_last_frame = vr.leftController.trigger
 	vr.leftController.ax_last_frame = vr.leftController.ax
@@ -134,6 +135,8 @@ func _update_keyboard(dt: float) -> void:
 	vr.rightController.by = button_BY
 	vr.rightController.ax = button_AX
 
+	vr.leftController.stick = stick
+	vr.rightController.stick = stick
 
 func _input(event: InputEvent) -> void:
 	if vr.inVR:

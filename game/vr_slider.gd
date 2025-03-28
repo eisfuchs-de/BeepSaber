@@ -42,6 +42,11 @@ func _ready() -> void:
 	scroll_node.connect(&"mouse_exited", Callable(self, &"_mouse_exited"))
 
 func _process(delta: float) -> void:
+	# Not all containers offer access to the vertical scrollbar, so guard against that
+	# for click-dragging or joystick-scrolling
+	if not v_scroll:
+		return
+
 	var newpos := -vr.rightController.rotation_degrees.x - (vr.rightController.transform.origin.y * 20.0)
 	if is_mouse_in:
 		if vr.rightController.trigger_pressed():
@@ -49,7 +54,7 @@ func _process(delta: float) -> void:
 			v_scroll.value += ((relpos - newpos) * 20.0)
 		else:
 			# Scroll via joystick
-			var y_joy := vr.rightController.get_vector2("primary").y
+			var y_joy := vr.rightController.stick.y
 			if absf(y_joy) > JOYSTICK_SCROLL_THRESHOLD:
 				# negate sign so positive scroll_amounts will scroll down
 				var scroll_amount := lerpf(
