@@ -45,6 +45,9 @@ var _recently_added_songs: Array[MapInfo] # newest is first, oldest is last
 var _most_played_songs: Array[MapInfo] # most played is first, least played is last
 var _currently_selected_songlist_ref: Array[MapInfo] = _all_songs # reference to whichever map list is the currently selected one
 
+# keep a record of all song identifiers so we can check if the song is already in our local database
+var all_song_keys: Array[String]
+
 # stop the preview player if the main song player is going
 func _physics_process(_delta: float) -> void:
 	if main_song_player_ref.playing:
@@ -119,6 +122,7 @@ func _load_playlists() -> void:
 
 func _discover_all_songs(seek_path: String) -> void:
 	_all_songs.clear()
+	all_song_keys.clear()
 	var dir := DirAccess.open(seek_path)
 	if dir:
 		@warning_ignore("return_value_discarded")
@@ -130,6 +134,7 @@ func _discover_all_songs(seek_path: String) -> void:
 				var song := Map.load_map_info(new_dir)
 				if song:
 					_all_songs.append(song)
+					all_song_keys.append(song.get_key())
 			file_name = dir.get_next()
 
 func _set_cur_playlist(songs: Array[MapInfo]) -> void:
