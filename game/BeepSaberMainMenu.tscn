@@ -206,7 +206,7 @@ theme = SubResource("9")
 theme_override_fonts/font = SubResource("10")
 flat = true
 
-[node name="DifficultyMenu" type="ItemList" parent="."]
+[node name="DifficultyMenu" type="Tree" parent="."]
 layout_mode = 0
 offset_left = 864.0
 offset_top = 64.0
@@ -214,6 +214,7 @@ offset_right = 1040.0
 offset_bottom = 320.0
 theme = SubResource("12")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+hide_root = true
 
 [node name="Songs_Label2" type="Label" parent="."]
 layout_mode = 0

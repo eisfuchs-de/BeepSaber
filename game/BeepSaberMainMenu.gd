@@ -25,13 +25,13 @@ var _cover_texture_create_sw := StopwatchFactory.create("cover_texture_create",1
 
 @onready var cover := $cover as TextureRect
 @onready var songs_menu := $SongsMenu as ItemList
-@onready var diff_menu := $DifficultyMenu as ItemList
+@onready var diff_menu := $DifficultyMenu as Tree
 @onready var delete_button := $Delete_Button as Button
 
 @onready var song_preview := $song_prev as AudioStreamPlayer
 var song_preview_transition_time := 1.0
 
-var current_selected: int
+var currently_selected_map: MapInfo
 
 enum PlaylistOptions {
 	AllSongs,
@@ -143,7 +143,6 @@ func _discover_all_songs(seek_path: String) -> void:
 
 func _set_cur_playlist(songs: Array[MapInfo]) -> void:
 	_currently_selected_songlist_ref = songs
-	var current_id := songs_menu.get_selected_items()
 	
 	songs_menu.clear()
 	
@@ -152,15 +151,12 @@ func _set_cur_playlist(songs: Array[MapInfo]) -> void:
 	for map in songs:
 		@warning_ignore("return_value_discarded")
 		songs_menu.add_item("%s - %s" % [map.song_author_name, map.song_name], default_song_icon)
+		if currently_selected_map and map.get_key() == currently_selected_map.get_key():
+			songs_menu.select(map_index, true)
+			_select_song(map_index)
 		var filepath := map.filepath + map.cover_image_filename
 		_bg_img_loader.load_texture(filepath, _on_cover_loaded, false, map_index)
 		map_index += 1
-	
-	if current_id.size() > 0:
-		var selected_id := current_id[0]
-		if selected_id >= song_count:
-			selected_id = song_count - 1
-		_select_song(selected_id)
 
 var default_song_icon := preload("res://game/data/beepsaber_logo.png")
 
@@ -212,11 +208,12 @@ func play_preview(buffer: PackedByteArray, start_time: float = 0.0, duration: fl
 		($song_prev/stop_prev as Timer).start(duration)
 
 func _select_song(id: int) -> void:
-	current_selected = id
 	songs_menu.ensure_current_is_visible()
 	delete_button.disabled = false
 	
 	var map := _currently_selected_songlist_ref[id]
+	currently_selected_map = map
+
 	($SongInfo_Label as Label).text = """Song Author: %s
 	Song Title: %s
 	Beatmap Author: %s
@@ -237,11 +234,32 @@ func _select_song(id: int) -> void:
 		vr.log_file_error(result, map.filepath + map.song_filename, "BeepSaberMainMenu.gd at line 223 ")
 	
 	diff_menu.clear()
-	for diff in map.difficulty_beatmaps:
-		var diff_index := diff_menu.add_item(diff.custom_name)
-		diff_menu.set_item_tooltip(diff_index, diff.difficulty + " / " + diff.custom_name)
-	
-	_select_difficulty(0)
+
+	# empty root item
+	var root := diff_menu.create_item()
+
+	var beatmap_id := 0
+	for difficulty_set_name in map.difficulty_beatmaps:
+		var difficulty_set_branch := diff_menu.create_item(root)
+		difficulty_set_branch.set_text(0, difficulty_set_name)
+
+		difficulty_set_branch.set_selectable(0, false)
+		difficulty_set_branch.set_selectable(1, false)
+
+		for difficultiy_name in map.difficulty_beatmaps[difficulty_set_name]:
+			var diff : DifficultyInfo = map.difficulty_beatmaps[difficulty_set_name][difficultiy_name]
+			var difficulty_item := diff_menu.create_item(difficulty_set_branch)
+			difficulty_item.set_text(0, diff.difficulty)
+			difficulty_item.set_text(1, diff.custom_name)
+			difficulty_item.set_tooltip_text(1, diff.difficulty + " / " + diff.custom_name)
+			difficulty_item.set_metadata(0, beatmap_id)
+
+			if beatmap_id == 0:
+				diff_menu.set_selected(difficulty_item, 0)
+				diff_menu.set_selected(difficulty_item, 1)
+				_select_difficulty()
+
+			beatmap_id += 1
 
 func _on_stop_prev_timeout() -> void:
 	var song_prev_Tween := song_preview.create_tween().set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
@@ -251,28 +269,27 @@ func _on_stop_prev_timeout() -> void:
 	await get_tree().create_timer(song_preview_transition_time).timeout
 	song_preview.stop()
 
+func _select_difficulty() -> void:
+	var item := diff_menu.get_selected()
+	if not item:
+		return
 
-var _map_difficulty := 0
-
-func _select_difficulty(id: int) -> void:
-	_map_difficulty = id
-	diff_menu.select(id)
+	diff_menu.set_selected(item, 0)
 	
 	# notify listeners that difficulty has changed
-	var difficulty := _currently_selected_songlist_ref[current_selected].difficulty_beatmaps[id]
-	difficulty_changed.emit(_currently_selected_songlist_ref[current_selected], difficulty.difficulty_rank)
+	var difficulty_set_name := item.get_parent().get_text(0)
+	var beatmaps := currently_selected_map.difficulty_beatmaps
+	var difficulty := beatmaps[difficulty_set_name][item.get_text(0)] as DifficultyInfo
+
+	difficulty_changed.emit(currently_selected_map, difficulty.difficulty_rank)
 
 
 func _load_map_and_start(map: MapInfo) -> void:
 	if map.is_empty(): return
-	
-	var set0 := map.difficulty_beatmaps
-	if (set0.size() == 0):
-		vr.log_error("No _difficultyBeatmaps in set")
-		return
-	
-	var diff_info := set0[_map_difficulty]
-	
+
+	var difficulty_item := diff_menu.get_selected()
+	var diff_info : DifficultyInfo = map.difficulty_beatmaps[difficulty_item.get_parent().get_text(0)][difficulty_item.get_text(0)]
+
 	start_map.emit(map, diff_info)
 
 func _on_Delete_Button_button_up() -> void:
@@ -282,7 +299,7 @@ func _on_Delete_Button_button_up() -> void:
 		delete_button.text = "Delete"
 	else:
 		delete_button.text = "Delete"
-		_delete_map(_currently_selected_songlist_ref[current_selected])
+		_delete_map(currently_selected_map)
 	
 func _delete_map(map: MapInfo) -> void:
 	Highscores.remove_map(map)
@@ -344,7 +361,7 @@ func _ready() -> void:
 
 func _on_Play_Button_pressed() -> void:
 	song_preview.stop()
-	_load_map_and_start(_currently_selected_songlist_ref[current_selected])
+	_load_map_and_start(currently_selected_map)
 
 
 func _on_Exit_Button_pressed() -> void:

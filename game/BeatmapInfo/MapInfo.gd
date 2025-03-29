@@ -18,7 +18,7 @@ var song_time_offset: float
 var custom_data: Dictionary
 
 var filepath: String
-var difficulty_beatmaps: Array[DifficultyInfo]
+var difficulty_beatmaps: Dictionary # { "difficulty_set": { "difficulty": DifficultyInfo } }
 
 @warning_ignore("shadowed_variable")
 func _init(
@@ -27,7 +27,7 @@ func _init(
 	preview_start_time: float, preview_duration: float, song_filename: String,
 	cover_image_filename: String, environment_name: String,
 	song_time_offset: float, custom_data: Dictionary, filepath: String,
-	difficulty_beatmaps: Array[DifficultyInfo]
+	difficulty_beatmaps: Dictionary
 ) -> void:
 	self.version = version
 	self.song_name = song_name
@@ -63,18 +63,19 @@ func get_key() -> String:
 	]
 
 static func new_v2(info_dict: Dictionary, load_path: String) -> MapInfo:
-	# mix all the difficulty sets into a single one
-	var diffs: Array[DifficultyInfo] = []
+	var diffs := {}
 	var difficulty_beatmap_sets := Utils.get_array(info_dict, "_difficultyBeatmapSets", [])
 	if (difficulty_beatmap_sets.is_empty()):
 		vr.log_warning("No _difficultyBeatmapSets in info.dat")
 	
 	for difficulty_set: Variant in difficulty_beatmap_sets:
 		if difficulty_set is Dictionary:
+			var difficulty_set_name : String = difficulty_set["_beatmapCharacteristicName"]
+			diffs[difficulty_set_name] = {}
 			var beatmaps := Utils.get_array(difficulty_set as Dictionary, "_difficultyBeatmaps", [])
-			for i: Variant in beatmaps:
-				if i is Dictionary:
-					diffs.append(DifficultyInfo.load_v2(i as Dictionary))
+			for beatmap: Variant in beatmaps:
+				if beatmap is Dictionary:
+					diffs[difficulty_set_name][beatmap["_difficulty"]] = DifficultyInfo.load_v2(beatmap)
 	return MapInfo.new(
 		Utils.get_str(info_dict, "_version", "2.0.0"),
 		Utils.get_str(info_dict, "_songName", ""),

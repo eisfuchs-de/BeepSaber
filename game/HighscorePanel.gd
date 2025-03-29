@@ -54,9 +54,11 @@ func _clear_list():
 		c.queue_free()
 	
 func _get_difficulty_name(map_info: MapInfo, diff_rank: int) -> String:
-	for beat_map in map_info.difficulty_beatmaps:
-		if beat_map.difficulty_rank == diff_rank:
-			return beat_map.difficulty
+	for difficulty_set_name in map_info.difficulty_beatmaps:
+		var beatmap : Dictionary = map_info.difficulty_beatmaps[difficulty_set_name]
+		for difficulty_name in beatmap:
+			if beatmap[difficulty_name].difficulty_rank == diff_rank:
+				return beatmap[difficulty_name].difficulty
 	return 'Rank %s' % diff_rank
 
 func _on_Exit_Button_pressed() -> void:
