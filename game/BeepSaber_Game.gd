@@ -93,7 +93,7 @@ func load_offset(song_key : String) -> float:
 			return 1.0
 
 	else:
-		print("WARN: Failed read offsets from %s (might not exist yet)" % OFFSETS_FILEPATH)
+		vr.log_warning("Failed read offsets from %s (might not exist yet)" % OFFSETS_FILEPATH)
 
 	return 1.0
 
@@ -107,7 +107,7 @@ func save_offset(song_key : String) -> void:
 
 	var json_res := JSON.parse_string(text) as Dictionary
 	if not json_res:
-		print("WARN: Failed to read offsets from %s" % OFFSETS_FILEPATH)
+		vr.log_warning("Failed to read offsets from %s" % OFFSETS_FILEPATH)
 
 	json_res[song_key] = origin_offset
 
@@ -116,7 +116,7 @@ func save_offset(song_key : String) -> void:
 		file.store_string(JSON.stringify(json_res, "   ", true))
 		file.close()
 	else:
-		print("ERROR: Failed to write offsets to %s" % OFFSETS_FILEPATH)
+		vr.log_error("Failed to write offsets to %s" % OFFSETS_FILEPATH)
 
 func start_map(info: MapInfo, map_difficulty: DifficultyInfo) -> void:
 	var map_filename := info.filepath + map_difficulty.beatmap_filename
@@ -160,7 +160,7 @@ func _transition_game_state(next_state: GameState) -> void:
 
 	if next_state == gamestate_mapselection:
 		xr_origin.transform.origin.z = 1.0
-		print("DEBUG: set origin back to 1.0")
+		vr.log_info("Set origin back to 1.0")
 
 	gamestate = next_state
 	gamestate._ready(self)
