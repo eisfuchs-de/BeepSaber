@@ -86,10 +86,12 @@ static func set_colors_from_custom_data() -> void:
 
 static func load_map_info(load_path: String) -> MapInfo:
 	var info_dict := {}
-	if FileAccess.file_exists(load_path + "Info.dat"):
-		info_dict = vr.load_json_file(load_path + "Info.dat")
-	elif FileAccess.file_exists(load_path + "info.dat"):
-		info_dict = vr.load_json_file(load_path + "info.dat")
+	var song_folder_files := DirAccess.get_files_at(load_path)
+	for file_name in song_folder_files:
+		if file_name.to_lower() == "info.dat":
+			info_dict = vr.load_json_file(load_path + file_name)
+			break
+
 	if (info_dict.is_empty()):
 		vr.log_error("Invalid info.dat found in " + load_path)
 		return null
