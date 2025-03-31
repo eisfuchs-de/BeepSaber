@@ -54,11 +54,10 @@ static var event_thread_1 := Thread.new()
 
 # not officially part of the spec, but used by mods a lot
 static func get_custom_color(info_data: Dictionary, diff_data: Dictionary, color_name: String, default: Color) -> Color:
+	# first get the custom color from the overall map info or the default
 	var output_color := Utils.get_color(info_data, color_name, default)
-	print("DEBUG: get_custom_color(", color_name, "): output1 ", output_color)
-
+	# now override with the difficulty custom color if present
 	output_color = Utils.get_color(diff_data, color_name, output_color)
-	print("DEBUG: get_custom_color(", color_name, "): output2 ", output_color)
 
 	return output_color
 
