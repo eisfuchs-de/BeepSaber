@@ -253,9 +253,9 @@ func fade_light(type: int, from: Color, to: Color, turn_off_after_fade: bool, tr
 	tween.set_parallel().set_trans(trans_type).set_ease(ease_type)
 	for m in material:
 		@warning_ignore("return_value_discarded")
-		tween.tween_property(m, ^"albedo_color", to, 1).from(from)
+		tween.tween_property(m, ^"albedo_color", to, 0.3).from(from)
 	@warning_ignore("return_value_discarded")
-	tween.tween_method(_on_Tween_tween_step.bind(type), from, to, 1)
+	tween.tween_method(_on_Tween_tween_step.bind(type), from, to, 0.2)
 	tween.play()
 	prev_tweeners[type] = tween
 	await tween.finished
