@@ -40,6 +40,14 @@ func get_dict(dict: Dictionary, key: String, default: Dictionary, platform_defau
 		return platform_defaults[OS.get_name()]
 	return default
 
+func get_color(dict: Dictionary, key: String, default: Color, platform_defaults: Dictionary = {}) -> Color:
+	if dict.has(key) and dict[key] is Dictionary:
+		@warning_ignore("unsafe_cast")
+		return Color(dict[key]["r"], dict[key]["g"], dict[key]["b"], 0.0)
+	if OS.get_name() in platform_defaults.keys():
+		return platform_defaults[OS.get_name()]
+	return default
+
 func unzip(zip_file: String, destination: String) -> void:
 	var zreader := ZIPReader.new()
 	if zreader.open(zip_file) != OK:

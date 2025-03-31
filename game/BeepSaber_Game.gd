@@ -140,10 +140,10 @@ func start_map(info: MapInfo, map_difficulty: DifficultyInfo) -> void:
 	origin_offset = load_offset(Map.current_info.get_key())
 	xr_origin.transform.origin.z = origin_offset
 
-	update_left_color(Map.color_left)
-	update_right_color(Map.color_right)
+	update_saber_colors(Map.color_left, Map.color_right)
+	update_env_colors()
 	if Map.event_stack.is_empty():
-		event_driver.set_all_on(Map.color_left, Map.color_right)
+		event_driver.set_all_on(Map.env_color_left, Map.env_color_right, Map.env_color_left_boost, Map.env_color_right_boost)
 	else:
 		event_driver.set_all_off()
 	
@@ -286,9 +286,9 @@ func on_settings_changed(key: StringName) -> void:
 	await get_tree().process_frame
 	match key:
 		&"color_left":
-			update_left_color(Settings.color_left)
+			update_saber_colors(Settings.color_left, Settings.color_right)
 		&"color_right":
-			update_right_color(Settings.color_right)
+			update_saber_colors(Settings.color_left, Settings.color_right)
 		&"events":
 			disable_events(not Settings.events)
 		&"show_debug_info":
@@ -299,35 +299,40 @@ func on_settings_changed(key: StringName) -> void:
 			xr_origin.transform.origin.y = Settings.player_height_offset
 
 func set_colors_from_settings() -> void:
-	update_left_color(Settings.color_left)
-	update_right_color(Settings.color_right)
+	update_saber_colors(Settings.color_left, Settings.color_right)
 
-func update_left_color(color: Color) -> void:
+func update_saber_colors(left_color: Color, right_color: Color) -> void:
 	if !left_saber:
 		await get_tree().process_frame
-	left_saber.set_color(color)
-	Arc.left_material.set_shader_parameter(&"color", color)
-	Arc.left_material_magnet.set_shader_parameter(&"color", color)
-	goggles_shader.set_shader_parameter(&"left_color", color)
-	event_driver.update_left_color(color)
-	standing_ground.update_left_color(color)
 
-func update_right_color(color: Color) -> void:
-	if !left_saber:
+	if !right_saber:
 		await get_tree().process_frame
-	right_saber.set_color(color)
-	Arc.right_material.set_shader_parameter(&"color", color)
-	Arc.right_material_magnet.set_shader_parameter(&"color", color)
-	goggles_shader.set_shader_parameter(&"right_color", color)
-	event_driver.update_right_color(color)
-	standing_ground.update_right_color(color)
 
+	left_saber.set_color(left_color)
+	right_saber.set_color(right_color)
+
+	Arc.left_material.set_shader_parameter(&"color", left_color)
+	Arc.left_material_magnet.set_shader_parameter(&"color", left_color)
+	Arc.right_material.set_shader_parameter(&"color", left_color)
+	Arc.right_material_magnet.set_shader_parameter(&"color", left_color)
+
+	goggles_shader.set_shader_parameter(&"left_color", left_color)
+	goggles_shader.set_shader_parameter(&"right_color", right_color)
+
+	standing_ground.update_left_color(left_color)
+	standing_ground.update_right_color(right_color)
+
+func update_env_colors() -> void:
+	event_driver.update_left_colors(Map.env_color_left, Map.env_color_left_boost)
+	event_driver.update_right_colors(Map.env_color_right, Map.env_color_right_boost)
+	event_driver.update_white_colors(Map.env_color_white, Map.env_color_white_boost)
+	
 func disable_events(disabled: bool) -> void:
 	event_driver.disabled = disabled
 	if disabled:
 		event_driver.set_all_off()
 	else:
-		event_driver.set_all_on(Settings.color_left, Settings.color_right)
+		event_driver.set_all_on(Map.env_color_left, Map.env_color_right, Map.env_color_left_boost, Map.env_color_right_boost)
 
 func _clear_track() -> void:
 	for c in track.get_children():

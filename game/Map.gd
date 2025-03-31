@@ -18,6 +18,17 @@ static var event_stack: Array[EventInfo]
 static var color_left: Color
 static var color_right: Color
 
+static var env_color_left: Color
+static var env_color_right: Color
+
+static var env_color_left_boost: Color
+static var env_color_right_boost: Color
+
+static var env_color_white: Color
+static var env_color_white_boost: Color
+
+static var obstacle_color: Color
+
 # some simple multithreading, since larger maps can take a very long time to
 # load.  one particulary notable outlier is the beatmap of shrek, which took
 # around 48 milliseconds to load before even on a 7800x3d, and now takes around
@@ -42,47 +53,43 @@ static var event_thread_0 := Thread.new()
 static var event_thread_1 := Thread.new()
 
 # not officially part of the spec, but used by mods a lot
+static func get_custom_color(info_data: Dictionary, diff_data: Dictionary, color_name: String, default: Color) -> Color:
+	var output_color := Utils.get_color(info_data, color_name, default)
+	print("DEBUG: get_custom_color(", color_name, "): output1 ", output_color)
+
+	output_color = Utils.get_color(diff_data, color_name, output_color)
+	print("DEBUG: get_custom_color(", color_name, "): output2 ", output_color)
+
+	return output_color
+
 static func set_colors_from_custom_data() -> void:
 	if Settings.disable_map_color:
 		Map.color_left = Settings.color_left
 		Map.color_right = Settings.color_right
+		Map.env_color_left = Settings.color_left
+		Map.env_color_right = Settings.color_right
+		Map.env_color_left_boost = Settings.color_left
+		Map.env_color_right_boost = Settings.color_right
+		Map.obstacle_color = Color(-1.0, -1.0, -1.0, 0.0)
 		return
 	
-	var set_colors := func(data: Dictionary, color_name: String) -> bool:
-		var left_name := color_name % "Left"
-		var right_name := color_name % "Right"
-		if (
-			data.has(left_name) and data.has(right_name)
-			and data[left_name] is Dictionary and data[right_name] is Dictionary
-		):
-			@warning_ignore("unsafe_cast")
-			var left := data[left_name] as Dictionary
-			@warning_ignore("unsafe_cast")
-			var right := data[right_name] as Dictionary
-			Map.color_left = Color(
-				Utils.get_float(left, "r", Settings.color_left.r),
-				Utils.get_float(left, "g", Settings.color_left.g),
-				Utils.get_float(left, "b", Settings.color_left.b)
-			)
-			Map.color_right = Color(
-				Utils.get_float(right, "r", Settings.color_right.r),
-				Utils.get_float(right, "g", Settings.color_right.g),
-				Utils.get_float(right, "b", Settings.color_right.b)
-			)
-			return true
-		return false
 	var info_data := current_info.custom_data
 	var diff_data := current_difficulty.custom_data
-	var custom_colors_found := false
-	if set_colors.call(info_data, "_envColor%sBoost"): custom_colors_found = true
-	if set_colors.call(diff_data, "_envColor%sBoost"): custom_colors_found = true
-	if set_colors.call(info_data, "_envColor%s"): custom_colors_found = true
-	if set_colors.call(diff_data, "_envColor%s"): custom_colors_found = true
-	if set_colors.call(info_data, "_color%s"): custom_colors_found = true
-	if set_colors.call(diff_data, "_color%s"): custom_colors_found = true
-	if not custom_colors_found:
-		Map.color_left = Settings.color_left
-		Map.color_right = Settings.color_right
+
+	# v2
+	Map.color_left = get_custom_color(info_data, diff_data, &"_colorLeft", Settings.color_left)
+	Map.color_right = get_custom_color(info_data, diff_data, &"_colorRight", Settings.color_right)
+
+	Map.env_color_left = get_custom_color(info_data, diff_data, &"_envColorLeft", Settings.color_left)
+	Map.env_color_right = get_custom_color(info_data, diff_data, &"_envColorRight", Settings.color_right)
+
+	Map.env_color_left_boost = get_custom_color(info_data, diff_data, &"_envColorLeftBoost", Settings.color_left)
+	Map.env_color_right_boost = get_custom_color(info_data, diff_data, &"_envColorRightBoost", Settings.color_right)
+
+	Map.env_color_white = get_custom_color(info_data, diff_data, &"_envColorWhite", Color.WHITE * 0.95)
+	Map.env_color_white_boost = get_custom_color(info_data, diff_data, &"_envColorWhiteBoost", Color.WHITE)
+
+	Map.obstacle_color = get_custom_color(info_data, diff_data, &"_obstacleColor", Color(-1.0, -1.0, -1.0, 0.0))
 
 static func load_map_info(load_path: String) -> MapInfo:
 	var info_dict := {}
@@ -446,6 +453,11 @@ static func load_beatmap(info: MapInfo, difficulty: DifficultyInfo, map_data: Di
 			Utils.custom_thread_call(chain_thread_0, load_chain_stack_v3, [Utils.get_array(map_data, "burstSliders", [])])
 			#event_thread_0.start(load_event_stack_v3.bind(Utils.get_array(map_data, "basicBeatmapEvents", [])))
 			Utils.custom_thread_call(event_thread_0, load_event_stack_v3, [Utils.get_array(map_data, "basicBeatmapEvents", [])])
+			# TODO: colorBoostBeatmapEvents
+			# TODO: lightColorEventBoxGroups
+			# TODO: lightRotationEventBoxGroups
+			# TODO: basicEventTypesWithKeywords
+			# TODO: useNormalEventsAsCompatibleEvents
 			current_info = info
 			current_difficulty = difficulty
 			Map.set_colors_from_custom_data()

@@ -7,6 +7,12 @@ var rings_in := false
 
 var left_color: Color
 var right_color: Color
+var left_color_boost: Color
+var right_color_boost: Color
+var white_color: Color
+var white_color_boost: Color
+
+var use_boost_color := false
 
 @onready var ring_holder := $Level/rings as Node3D
 @onready var diagonal_lasers_holder := $Level/DiagonalLasers as Node3D
@@ -50,16 +56,26 @@ func _process(delta: float) -> void:
 				if ring_rot_inv_dir: rot *= -1
 				(ring as Node3D).rotate_z((rot * delta) * (float(ring.get_index()+1)/5))
 
-func update_left_color(color: Color) -> void:
+func update_left_colors(color: Color, color_boost: Color) -> void:
 	left_color = color
+	left_color_boost = color_boost
+	if use_boost_color:
+		color = left_color_boost
 	turn_light_on(EventInfo.TYPE_DIAGONAL_LASERS, color)
 	turn_light_on(EventInfo.TYPE_LEFT_WAVING_LASERS, color)
 	turn_light_on(EventInfo.TYPE_RIGHT_WAVING_LASERS, color)
 
-func update_right_color(color: Color) -> void:
+func update_right_colors(color: Color, color_boost: Color) -> void:
 	right_color = color
+	right_color_boost = color_boost
+	if use_boost_color:
+		color = right_color_boost
 	turn_light_on(EventInfo.TYPE_SQUARE_LASERS, color)
 	turn_light_on(EventInfo.TYPE_FLOOR_LIGHTS, color)
+
+func update_white_colors(white: Color, white_boost: Color) -> void:
+	white_color = white
+	white_color_boost = white_boost
 
 func set_all_off() -> void:
 	if disabled:
@@ -70,44 +86,51 @@ func set_all_off() -> void:
 		for i in range(5):
 			turn_light_off(i)
 
-func set_all_on(left: Color, right: Color) -> void:
+func set_all_on(left: Color, right: Color, left_boost: Color, right_boost: Color) -> void:
 	if !disabled:
-		update_left_color(left)
-		update_right_color(right)
+		update_left_colors(left, left_boost)
+		update_right_colors(right, right_boost)
 		ring_holder.visible = true
 
 func process_event(data: EventInfo) -> void:
 	if disabled: return
+
+	var l_color = left_color_boost if use_boost_color else left_color
+	var r_color = right_color_boost if use_boost_color else right_color
+	var w_color = white_color_boost if use_boost_color else white_color
+
 	if data.type in range(0,5):
 		match data.value:
 			EventInfo.VALUE_LIGHTS_OFF:
 				turn_light_off(data.type)
 			EventInfo.VALUE_LIGHTS_RIGHT_ON:
-				turn_light_on(data.type, right_color)
+				turn_light_on(data.type, r_color)
 			EventInfo.VALUE_LIGHTS_RIGHT_FLASH:
-				flash_light_on(data.type, right_color)
+				flash_light_on(data.type, r_color)
 			EventInfo.VALUE_LIGHTS_RIGHT_FADE:
-				flash_light_then_fade_off(data.type, right_color)
+				flash_light_then_fade_off(data.type, r_color)
 			EventInfo.VALUE_LIGHTS_FADE_TO_RIGHT:
-				fade_light_from_current(data.type, right_color)
+				fade_light_from_current(data.type, r_color)
 			EventInfo.VALUE_LIGHTS_LEFT_ON:
-				turn_light_on(data.type, left_color)
+				turn_light_on(data.type, l_color)
 			EventInfo.VALUE_LIGHTS_LEFT_FLASH:
-				flash_light_on(data.type, left_color)
+				flash_light_on(data.type, l_color)
 			EventInfo.VALUE_LIGHTS_LEFT_FADE:
-				flash_light_then_fade_off(data.type, left_color)
+				flash_light_then_fade_off(data.type, l_color)
 			EventInfo.VALUE_LIGHTS_FADE_TO_LEFT:
-				fade_light_from_current(data.type, left_color)
+				fade_light_from_current(data.type, l_color)
 			EventInfo.VALUE_LIGHTS_WHITE_ON:
-				turn_light_on(data.type, Color.WHITE)
+				turn_light_on(data.type, w_color)
 			EventInfo.VALUE_LIGHTS_WHITE_FLASH:
-				flash_light_on(data.type, Color.WHITE)
+				flash_light_on(data.type, w_color)
 			EventInfo.VALUE_LIGHTS_WHITE_FADE:
-				flash_light_then_fade_off(data.type, Color.WHITE)
+				flash_light_then_fade_off(data.type, w_color)
 			EventInfo.VALUE_LIGHTS_FADE_TO_WHITE:
-				fade_light_from_current(data.type, Color.WHITE)
+				fade_light_from_current(data.type, w_color)
 	else:
 		match data.type:
+			5:	# boost
+				use_boost_color = data.value
 			8:
 				var ringtween := ring_holder.create_tween()
 				if absf(ring_rot_speed) < 1.0:

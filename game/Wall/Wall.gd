@@ -29,7 +29,8 @@ func spawn(wall_info: ObstacleInfo, current_beat: float) -> void:
 	shape.size.z = z_size
 	despawn_z = Constants.MISS_Z + depth
 	(mesh.material_override as ShaderMaterial).set_shader_parameter(&"size", Vector3(x_size, y_size, z_size))
-	
+	if Map.obstacle_color.r != -1:
+		(mesh.material_override as ShaderMaterial).set_shader_parameter(&"albedo_color", Vector4(Map.obstacle_color.r, Map.obstacle_color.g, Map.obstacle_color.b, Map.obstacle_color.a))
 	transform.origin.x = (0.5 * wall_info.width + wall_info.line_index - 2) * Constants.LANE_DISTANCE
 	transform.origin.y = (0.5 * wall_info.height + wall_info.line_layer) * Constants.LANE_DISTANCE
 	transform.origin.z = (current_beat - wall_info.beat) * Constants.BEAT_DISTANCE - depth
