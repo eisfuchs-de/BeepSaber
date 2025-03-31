@@ -124,7 +124,17 @@ func start_map(info: MapInfo, map_difficulty: DifficultyInfo) -> void:
 	
 	if (map_data == null):
 		vr.log_error("Could not read map data from " + map_filename)
-	if not Map.load_beatmap(info, map_difficulty, map_data):
+
+	var lightshow_data := {}
+	if map_difficulty.lightshow_filename:
+		var lightshow_filename := info.filepath + map_difficulty.lightshow_filename
+		lightshow_data = vr.load_json_file(lightshow_filename)
+		if lightshow_data == null:
+			vr.log_error("Could not read lightshow data from " + lightshow_filename)
+			# set to empty dictionary so we don't get errors later
+			lightshow_data = {}
+
+	if not Map.load_beatmap(info, map_difficulty, map_data, lightshow_data):
 		return
 	
 	origin_offset = load_offset(Map.current_info.get_key())
