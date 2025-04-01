@@ -15,10 +15,13 @@ var C_RIGHT := Color()
 @onready var r_sprite := $SubViewport/ColorRect/burn_r/sprite as Panel
 @onready var timer_clear := $TimerClear as Timer
 
+const mixed_reality_burn_alpha := 0.3
+
 var is_disabled := false
 
 func _ready() -> void:
 	var material := ($Node3D/cutFloor as MeshInstance3D).material_override as StandardMaterial3D
+	sub_viewport.transparent_bg = Settings.mixed_reality
 	material.albedo_texture = sub_viewport.get_texture()
 	material.emission_texture = sub_viewport.get_texture()
 	
@@ -29,10 +32,14 @@ func _ready() -> void:
 func update_left_color(color: Color) -> void:
 	C_LEFT = color
 	burn_l.modulate = color*6
+	if Settings.mixed_reality:
+		burn_l.modulate.a = mixed_reality_burn_alpha
 
 func update_right_color(color: Color) -> void:
 	C_RIGHT = color
 	burn_r.modulate = color*6
+	if Settings.mixed_reality:
+		burn_r.modulate.a = mixed_reality_burn_alpha
 
 var left_is_out := false
 var right_is_out := false
