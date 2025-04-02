@@ -53,6 +53,6 @@ func note_cut(position: Vector3, beat_accuracy: float, cut_angle_accuracy: float
 	points_new = roundf(points_new)
 	add_points(position, int(points_new))
 
-func bad_cut(position: Vector3) -> void:
+func bad_cut(position: Vector3, description: String) -> void:
 	reset_combo()
-	points_awarded.emit(position, "x")
+	points_awarded.emit(position, description if Settings.explain else "x")
