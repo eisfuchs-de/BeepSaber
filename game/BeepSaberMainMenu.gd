@@ -137,7 +137,7 @@ func _discover_all_songs(seek_path: String) -> void:
 				if song:
 					_all_songs.append(song)
 				# record all hashes, even those that have unsupported versions
-				all_song_hashes.append(file_name)
+				all_song_hashes.append(song.get_hash())
 			file_name = dir.get_next()
 	emit_signal("song_list_changed")
 

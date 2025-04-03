@@ -17,6 +17,8 @@ var environment_name: String
 var song_time_offset: float
 var custom_data: Dictionary
 
+var hash: String
+
 var filepath: String
 var difficulty_beatmaps: Dictionary # { "difficulty_set": { "difficulty": DifficultyInfo } }
 
@@ -46,6 +48,8 @@ func _init(
 	self.filepath = filepath
 	self.difficulty_beatmaps = difficulty_beatmaps
 
+	self.hash = filepath.get_base_dir().get_file()
+
 func is_empty() -> bool:
 	return (
 		song_name.is_empty()
@@ -61,6 +65,9 @@ func get_key() -> String:
 		song_sub_name,
 		level_author_name
 	]
+
+func get_hash() -> String:
+	return hash
 
 static func new_v2(info_dict: Dictionary, load_path: String) -> MapInfo:
 	var diffs := {}
