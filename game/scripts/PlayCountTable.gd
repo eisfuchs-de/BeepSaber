@@ -7,7 +7,7 @@ const PLAY_COUNT_FILEPATH = "user://play_count.json"
 # internal copy of the play count table
 # restored from user file in _ready()
 # {
-#   "<song_key>" : {# play counts for a given song
+#   "<song_hash>" : {# play counts for a given song
 #       "1" : 0, # play count at diffucultyRank 1
 #       "3" : 10 # play count at diffucultyRank 3
 #   }
@@ -26,6 +26,11 @@ func remove_map(map_info: MapInfo) -> void:
 	var song_key := map_info.get_key()
 	@warning_ignore("return_value_discarded")
 	_pc_table.erase(song_key)
+
+	var song_hash := map_info.get_hash()
+	@warning_ignore("return_value_discarded")
+	_pc_table.erase(song_hash)
+
 	save_table()
 
 # increments the maps play count by 1.
@@ -35,41 +40,60 @@ func remove_map(map_info: MapInfo) -> void:
 #
 # return : None
 func increment_play_count(map_info: MapInfo, diff_rank: int) -> void:
-	var song_key := map_info.get_key()
-	var key_dict := Utils.get_dict(_pc_table, song_key, {})
-	if not _pc_table.has(song_key):
-		_pc_table[song_key] = key_dict
-	
+	var song_hash := map_info.get_hash()
+
+	if not _pc_table.has(song_hash):
+		_pc_table[song_hash] = {}
+
+	var play_count_dict := Utils.get_dict(_pc_table, song_hash, {})
+
+	if play_count_dict.is_empty():
+		var song_key := map_info.get_key()
+		play_count_dict = Utils.get_dict(_pc_table, song_key, {})
+		_pc_table[song_hash] = play_count_dict
+		@warning_ignore("return_value_discarded")
+		_pc_table.erase(song_key)
+
 	var diff_str := str(diff_rank)
-	if not key_dict.has(diff_str):
-		key_dict[diff_str] = 0
-	
-	key_dict[diff_str] += 1
+	if not play_count_dict.has(diff_str):
+		play_count_dict[diff_str] = 1
+	else:
+		play_count_dict[diff_str] += 1
 	
 	save_table()
 
 # return : the map's play count for the given difficulty
 func get_play_count(map_info: MapInfo, diff_rank: int) -> int:
-	var song_key := map_info.get_key()
-	var key_dict := Utils.get_dict(_pc_table, song_key, {})
-	if key_dict.is_empty():
+	var song_hash := map_info.get_hash()
+	var play_count_dict := Utils.get_dict(_pc_table, song_hash, {})
+
+	if play_count_dict.is_empty():
+		var song_key := map_info.get_key()
+		play_count_dict = Utils.get_dict(_pc_table, song_key, {})
+
+	if play_count_dict.is_empty():
 		return 0
 	
 	var diff_str := str(diff_rank)
-	if not key_dict.has(diff_str):
+	if not play_count_dict.has(diff_str):
 		return 0
 	
-	return int(Utils.get_float(key_dict, diff_str, 0))
+	return int(Utils.get_float(play_count_dict, diff_str, 0))
 
 # return : the map's total play count accros all difficulties
 func get_total_play_count(map_info: MapInfo) -> int:
-	var song_key := map_info.get_key()
-	var key_dict := Utils.get_dict(_pc_table, song_key, {})
-	if key_dict.is_empty():
+	var song_hash := map_info.get_hash()
+	var play_count_dict := Utils.get_dict(_pc_table, song_hash, {})
+
+	if play_count_dict.is_empty():
+		var song_key := map_info.get_key()
+		play_count_dict = Utils.get_dict(_pc_table, song_key, {})
+
+	if play_count_dict.is_empty():
 		return 0
 	
 	var total := 0
-	for count in key_dict.values():
+	for count in play_count_dict.values():
 		total += count
 	return total
 
