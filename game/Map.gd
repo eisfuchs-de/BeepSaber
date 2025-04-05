@@ -6,6 +6,7 @@ class_name Map
 # https://bsmg.wiki/mapping/map-format.html
 
 static var current_info: MapInfo
+static var current_difficulty_set: String
 static var current_difficulty: DifficultyInfo
 
 static var note_stack: Array[ColorNoteInfo]

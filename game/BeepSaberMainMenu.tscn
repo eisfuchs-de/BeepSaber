@@ -1,9 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://glii0poslcve"]
+[gd_scene load_steps=20 format=3 uid="uid://glii0poslcve"]
 
 [ext_resource type="Theme" uid="uid://dvcjel72een6o" path="res://OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard.theme" id="1"]
 [ext_resource type="FontFile" uid="uid://cdsnr8tscm8y6" path="res://OQ_Toolkit/OQ_UI2D/theme/Roboto-Medium.ttf" id="2"]
 [ext_resource type="Script" path="res://game/BeepSaberMainMenu.gd" id="3"]
 [ext_resource type="Texture2D" uid="uid://cviyxvrpvyr0g" path="res://game/data/beepsaber_logo.png" id="3_wpmn0"]
+[ext_resource type="FontFile" path="res://DejaVuSans.ttf" id="4_ger5h"]
 [ext_resource type="FontFile" uid="uid://01k27lk2a4bw" path="res://OQ_Toolkit/OQ_UI2D/theme/RobotoMono-Medium.ttf" id="5"]
 [ext_resource type="PackedScene" uid="uid://dtipmx5ep1dkk" path="res://game/vr_slider.tscn" id="6"]
 [ext_resource type="FontVariation" uid="uid://ckoe517v8p3qp" path="res://OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard_font.tres" id="7"]
@@ -167,7 +168,7 @@ offset_bottom = 36.0
 
 [node name="cover" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = 1050.0
+offset_left = 1094.0
 offset_top = 67.0
 offset_right = 1390.0
 offset_bottom = 320.0
@@ -178,13 +179,15 @@ stretch_mode = 5
 [node name="SongInfo_Label" type="Label" parent="."]
 layout_mode = 0
 offset_left = 864.0
-offset_top = 320.0
+offset_top = 329.0
 offset_right = 1328.0
-offset_bottom = 468.0
+offset_bottom = 473.0
+theme_override_fonts/font = ExtResource("4_ger5h")
 text = "Song Author: TheFatRat
 Song Title: Time Lapse
 Beatmap Author: Timeweaver
-Play Count: 10"
+Play Count: 10
+Avg. Stars: ★★★✮☆☆ (3.5)	"
 
 [node name="SongsMenu" type="ItemList" parent="."]
 layout_mode = 0
@@ -194,6 +197,7 @@ offset_right = 848.0
 offset_bottom = 560.0
 theme = SubResource("7")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_ger5h")
 fixed_icon_size = Vector2i(60, 60)
 
 [node name="PlaylistSelector" type="OptionButton" parent="."]
@@ -210,10 +214,12 @@ flat = true
 layout_mode = 0
 offset_left = 864.0
 offset_top = 64.0
-offset_right = 1040.0
+offset_right = 1066.0
 offset_bottom = 320.0
 theme = SubResource("12")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_ger5h")
+columns = 2
 hide_root = true
 
 [node name="Songs_Label2" type="Label" parent="."]

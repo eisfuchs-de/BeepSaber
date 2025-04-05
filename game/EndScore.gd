@@ -3,10 +3,14 @@ class_name EndScore
 
 signal mainmenu
 signal repeat
+signal vote(v: int)
 
 var animated_percent: float = 0.0
 @onready var raycast_area := $RaycastArea as Area3D
 @onready var collision := $RaycastArea/CollisionShape3D as CollisionShape3D
+@onready var stars_display := ($Stars/Vote as MeshInstance3D).mesh as TextMesh
+
+var voted := 0
 
 func _ready() -> void:
 	set_buttons_disabled(true)
@@ -78,10 +82,25 @@ func show_score(score: int, record: int, percent: float, song_string: String, is
 func set_buttons_disabled(disabled: bool) -> void:
 	($Repeat/Collision as CollisionShape3D).disabled = disabled
 	($MainMenu/Collision as CollisionShape3D).disabled = disabled
+	($Stars/Collision as CollisionShape3D).disabled = disabled
 
-func _on_Repeat_button_up() -> void:
+func _on_Repeat_button_up(pos: Vector3) -> void:
 	repeat.emit()
 
-func _on_MainMenu_button_up() -> void:
+func _on_MainMenu_button_up(pos: Vector3) -> void:
 	set_buttons_disabled(true)
 	mainmenu.emit()
+
+# TODO: duplicates a function in BeepSaberMainMenu.gd
+func stars(value: float) -> String:
+	if value < 0.0:
+		return "-"
+	var stars := ("★★★★★".substr(5 - int(value), 5) + "✮".left(fposmod(value, 1) + 0.5) + "☆☆☆☆☆").left(5)
+	return stars
+
+func _on_Stars_button_repeated(pos: Vector3) -> void:
+	voted = int(clamp((pos.x + 0.5) * 6.0, 0.0, 5.0))
+	stars_display.text = stars(voted)
+
+func _on_Stars_button_released(pos: Vector3) -> void:
+	vote.emit(voted)

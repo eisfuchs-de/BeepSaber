@@ -47,6 +47,9 @@ var _currently_selected_songlist_ref: Array[MapInfo] = _all_songs # reference to
 
 # keep a record of all song hashes so we can check if the song is already in our local database
 var all_song_hashes: Array[String]
+# map song keys to hashes
+var keys_to_hashes: Dictionary
+
 # send a signal whenever the all_song_keys array changes
 signal song_list_changed()
 
@@ -103,7 +106,9 @@ func _load_playlists() -> void:
 	for song in _all_songs:
 		var song_path := song.filepath
 		var modified_time := FileAccess.get_modified_time(song_path)
-		var play_count := PlayCount.get_total_play_count(song)
+		var total_play_count : Dictionary = PlayCount.get_total_play_count(song)
+		var play_count : int = total_play_count[&"total"]
+		var avg_stars : float = total_play_count[&"avg_stars"]	# TODO: playlist "Most Popular"
 		songs_with_modify_times.append(MapInfoWithSort.new(modified_time, song))
 		songs_with_play_count.append(MapInfoWithSort.new(play_count, song))
 	
@@ -125,6 +130,7 @@ func _load_playlists() -> void:
 func _discover_all_songs(seek_path: String) -> void:
 	_all_songs.clear()
 	all_song_hashes.clear()
+	keys_to_hashes.clear()
 	var dir := DirAccess.open(seek_path)
 	if dir:
 		@warning_ignore("return_value_discarded")
@@ -138,7 +144,11 @@ func _discover_all_songs(seek_path: String) -> void:
 					_all_songs.append(song)
 				# record all hashes, even those that have unsupported versions
 				all_song_hashes.append(song.get_hash())
+				# record mapping from keys to hashes
+				keys_to_hashes[song.get_key()] = song.get_hash()
 			file_name = dir.get_next()
+
+	PlayCount.load_table(keys_to_hashes)
 	emit_signal("song_list_changed")
 
 func _set_cur_playlist(songs: Array[MapInfo]) -> void:
@@ -150,7 +160,12 @@ func _set_cur_playlist(songs: Array[MapInfo]) -> void:
 	var map_index := 0
 	for map in songs:
 		@warning_ignore("return_value_discarded")
-		songs_menu.add_item("%s - %s" % [map.song_author_name, map.song_name], default_song_icon)
+		songs_menu.add_item("%s %s - %s" % [
+			stars(PlayCount.get_total_play_count(map)["avg_stars"]),
+			map.song_author_name,
+			map.song_name,
+		], default_song_icon)
+
 		if currently_selected_map and map.get_key() == currently_selected_map.get_key():
 			songs_menu.select(map_index, true)
 			_select_song(map_index)
@@ -207,6 +222,13 @@ func play_preview(buffer: PackedByteArray, start_time: float = 0.0, duration: fl
 		song_preview.play(start_time)
 		($song_prev/stop_prev as Timer).start(duration)
 
+# TODO: duplicates a function in EndScore.gd
+func stars(value: float) -> String:
+	if value < 0.0:
+		return "-"
+	var stars := ("★★★★★".substr(5 - int(value), 5) + "✮".left(fposmod(value, 1) + 0.5) + "☆☆☆☆☆").left(5)
+	return stars
+
 func _select_song(id: int) -> void:
 	songs_menu.ensure_current_is_visible()
 	delete_button.disabled = false
@@ -214,14 +236,19 @@ func _select_song(id: int) -> void:
 	var map := _currently_selected_songlist_ref[id]
 	currently_selected_map = map
 
+	var value : float = PlayCount.get_total_play_count(map)[&"avg_stars"]
+
 	($SongInfo_Label as Label).text = """Song Author: %s
 	Song Title: %s
 	Beatmap Author: %s
-	Play Count: %d""" % [
+	Play Count: %d
+	Avg. Stars: %s (%1.1f)""" % [
 		map.song_author_name,
 		map.song_name,
 		map.level_author_name,
-		PlayCount.get_total_play_count(map)
+		PlayCount.get_total_play_count(map)[&"total"],
+		stars(value),
+		value,
 	]
 	
 	# load cover in background to avoid freezing UI
@@ -250,8 +277,9 @@ func _select_song(id: int) -> void:
 			var diff : DifficultyInfo = map.difficulty_beatmaps[difficulty_set_name][difficultiy_name]
 			var difficulty_item := diff_menu.create_item(difficulty_set_branch)
 			difficulty_item.set_text(0, diff.difficulty)
-			difficulty_item.set_text(1, diff.custom_name)
-			difficulty_item.set_tooltip_text(1, diff.difficulty + " / " + diff.custom_name)
+
+			difficulty_item.set_text(1, stars(PlayCount.get_play_count(map, difficulty_set_name, diff.difficulty_rank).get("stars", -1)))
+			difficulty_item.set_tooltip_text(0, diff.difficulty + " / " + diff.custom_name)
 			difficulty_item.set_metadata(0, beatmap_id)
 
 			if beatmap_id == 0:
@@ -285,10 +313,12 @@ func _select_difficulty() -> void:
 
 
 func _load_map_and_start(map: MapInfo) -> void:
-	if map.is_empty(): return
+	if not map: return
 
 	var difficulty_item := diff_menu.get_selected()
 	var diff_info : DifficultyInfo = map.difficulty_beatmaps[difficulty_item.get_parent().get_text(0)][difficulty_item.get_text(0)]
+
+	Map.current_difficulty_set = difficulty_item.get_parent().get_text(0)
 
 	start_map.emit(map, diff_info)
 

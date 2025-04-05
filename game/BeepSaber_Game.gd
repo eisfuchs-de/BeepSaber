@@ -373,7 +373,7 @@ func _on_PlayerHead_area_exited(area: Area3D) -> void:
 # the high score
 func _on_song_ended() -> void:
 	song_player.stop()
-	PlayCount.increment_play_count(Map.current_info,Map.current_difficulty.difficulty_rank)
+	PlayCount.increment_play_count(Map.current_info, Map.current_difficulty_set, Map.current_difficulty.difficulty_rank)
 	
 	var new_record := false
 	var highscore := Highscores.get_highscore(Map.current_info,Map.current_difficulty.difficulty_rank)
@@ -412,6 +412,9 @@ func _restart_button() -> void:
 func _main_menu_button() -> void:
 	_clear_track()
 	_transition_game_state(gamestate_mapselection)
+
+func _voted(stars: int) -> void:
+	PlayCount.set_stars(Map.current_info, Map.current_difficulty_set, Map.current_difficulty.difficulty_rank, stars)
 
 func _unpause_button() -> void:
 	pause_menu.visible = false

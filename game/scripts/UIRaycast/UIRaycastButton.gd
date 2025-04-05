@@ -2,8 +2,9 @@
 extends UIRaycastTarget
 class_name UIRaycastButton
 
-signal pressed
-signal released
+signal pressed(pos: Vector3)
+signal repeated(pos: Vector3)
+signal released(pos: Vector3)
 
 @export var size := Vector2(0.25, 0.0625):
 	set(s):
@@ -39,14 +40,16 @@ func _ready() -> void:
 	var text_mesh := $Text as MeshInstance3D
 	(text_mesh.mesh as TextMesh).text = text
 
-func ui_raycast_hit_event(_pos: Vector3, click: bool, release: bool) -> void:
+func ui_raycast_hit_event(pos: Vector3, click: bool, release: bool) -> void:
 	if click:
 		if not held:
-			pressed.emit()
+			pressed.emit((pos - position) / Vector3(size.x, size.y, 1.0))
 		held = true
 	elif release and held:
-		released.emit()
+		released.emit((pos - position) / Vector3(size.x, size.y, 1.0))
 		held = false
+	elif held:
+		repeated.emit((pos - position) / Vector3(size.x, size.y, 1.0))
 	back_shader.set_shader_parameter(&"highlight", 1.0 + float(held))
 
 func ui_raycast_exit() -> void:
