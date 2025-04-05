@@ -36,13 +36,15 @@ var currently_selected_map: MapInfo
 enum PlaylistOptions {
 	AllSongs,
 	RecentlyAdded,
-	MostPlayed
+	MostPlayed,
+	MostPopular,
 }
 
 # several different lists of maps, for use with the sort-by bar up top
 var _all_songs: Array[MapInfo]
 var _recently_added_songs: Array[MapInfo] # newest is first, oldest is last
 var _most_played_songs: Array[MapInfo] # most played is first, least played is last
+var _most_popular_songs: Array[MapInfo] # best voted is first, least voted is last
 var _currently_selected_songlist_ref: Array[MapInfo] = _all_songs # reference to whichever map list is the currently selected one
 
 # keep a record of all song hashes so we can check if the song is already in our local database
@@ -103,23 +105,29 @@ func _load_playlists() -> void:
 	_discover_all_songs(Constants.APPDATA_PATH+"Songs/")
 	var songs_with_modify_times: Array[MapInfoWithSort] = []
 	var songs_with_play_count: Array[MapInfoWithSort] = []
+	var songs_with_star_rating: Array[MapInfoWithSort] = []
 	for song in _all_songs:
 		var song_path := song.filepath
 		var modified_time := FileAccess.get_modified_time(song_path)
 		var total_play_count : Dictionary = PlayCount.get_total_play_count(song)
 		var play_count : int = total_play_count[&"total"]
-		var avg_stars : float = total_play_count[&"avg_stars"]	# TODO: playlist "Most Popular"
+		var avg_stars : float = total_play_count[&"avg_stars"]
 		songs_with_modify_times.append(MapInfoWithSort.new(modified_time, song))
 		songs_with_play_count.append(MapInfoWithSort.new(play_count, song))
+		songs_with_star_rating.append(MapInfoWithSort.new(avg_stars, song))
 	
 	songs_with_modify_times.sort_custom(compare)
 	songs_with_play_count.sort_custom(compare)
+	songs_with_star_rating.sort_custom(compare)
 	_recently_added_songs = []
 	_most_played_songs = []
+	_most_popular_songs = []
 	for song in songs_with_modify_times:
 		_recently_added_songs.append(song.info)
 	for song in songs_with_play_count:
 		_most_played_songs.append(song.info)
+	for song in songs_with_star_rating:
+		_most_popular_songs.append(song.info)
 	
 	refresh_playlist()
 	
@@ -361,6 +369,7 @@ func _ready() -> void:
 	playlist_selector.add_item("All Songs")
 	playlist_selector.add_item("Recently Added")
 	playlist_selector.add_item("Most Played")
+	playlist_selector.add_item("Most Popular")
 	
 	_load_playlists()
 	
@@ -482,6 +491,8 @@ func _on_PlaylistSelector_item_selected(id: int) -> void:
 			_set_cur_playlist(_most_played_songs)
 		PlaylistOptions.RecentlyAdded:
 			_set_cur_playlist(_recently_added_songs)
+		PlaylistOptions.MostPopular:
+			_set_cur_playlist(_most_popular_songs)
 		_:
 			vr.log_warning("Unsupported playlist option %s" % id)
 			_set_cur_playlist(_all_songs)
