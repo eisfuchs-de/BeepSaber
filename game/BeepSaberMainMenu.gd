@@ -485,3 +485,10 @@ func _on_PlaylistSelector_item_selected(id: int) -> void:
 		_:
 			vr.log_warning("Unsupported playlist option %s" % id)
 			_set_cur_playlist(_all_songs)
+
+func _notification(what: int) -> void:
+	if what == 41:	# NOTIFICATION_ENTER_WORLD - apparently not exposed as a constant name?
+		if visible:
+			# reload chosen song when main menu becomes visible
+			if songs_menu.is_anything_selected():
+				_select_song(songs_menu.get_selected_items()[0])
