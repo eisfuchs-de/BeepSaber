@@ -112,7 +112,10 @@ var spectator_hud: bool:
 	set(value):
 		spectator_hud = value
 		set_and_emit(&"spectator_hud", value)
-
+var selected_playlist: int:
+	set(value):
+		selected_playlist = value
+		set_and_emit(&"selected_playlist", value)
 
 
 func _ready() -> void:
@@ -164,7 +167,8 @@ var default_values = {
 	audio_music = 0.8,
 	audio_sfx = 0.8,
 	spectator_view = false,
-	spectator_hud = true
+	spectator_hud = true,
+	selected_playlist = 1,
 }
 
 func cast_or_default(key: String, to_type: int = -1) -> Variant:
@@ -244,6 +248,7 @@ func load_old_config() -> void:
 	events = Utils.get_bool(settings_dict, "events", true, {"Web": false})
 	disable_map_color = Utils.get_bool(settings_dict, "disable_map_color", false)
 	player_height_offset = Utils.get_float(settings_dict, "player_height_offset", 0.0)
+	selected_playlist = int(Utils.get_float(settings_dict, "selected_playlist", 1.0))
 
 func save() -> void:
 	var error := config.save(CONFIG_PATH)

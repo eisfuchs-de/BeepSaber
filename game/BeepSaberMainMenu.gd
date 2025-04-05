@@ -371,6 +371,9 @@ func _ready() -> void:
 	playlist_selector.add_item("Most Played")
 	playlist_selector.add_item("Most Popular")
 	
+	playlist_selector.select(Settings.selected_playlist)
+	playlist_selector.item_selected.emit(Settings.selected_playlist)
+	
 	_load_playlists()
 	
 	await keyboard.ready
@@ -382,9 +385,6 @@ func _ready() -> void:
 	keyboard._text_edit.text_changed.connect(_text_input_changed)
 	@warning_ignore("return_value_discarded")
 	keyboard._text_edit.focus_exited.connect(_text_input_enter)
-	
-	playlist_selector.select(1)
-	playlist_selector.item_selected.emit(1)
 	
 	if song_uploader_ref and song_uploader_ref.active:
 		$upload_url.text = "Manually Upload Custom Songs: \n%s"%[
@@ -496,6 +496,10 @@ func _on_PlaylistSelector_item_selected(id: int) -> void:
 		_:
 			vr.log_warning("Unsupported playlist option %s" % id)
 			_set_cur_playlist(_all_songs)
+			return
+
+	Settings.selected_playlist = id
+	Settings.save()
 
 func _notification(what: int) -> void:
 	if what == 41:	# NOTIFICATION_ENTER_WORLD - apparently not exposed as a constant name?
