@@ -38,6 +38,8 @@ func show_score(score: int, record: int, percent: float, song_string: String, is
 	var nr_label := $NRViewport/NRLabel as RichTextLabel
 	var name_label := ($NameLabel as MeshInstance3D).mesh as TextMesh
 	
+	stars_display.text = stars(PlayCount.get_play_count(Map.current_info, Map.current_difficulty_set, Map.current_difficulty.difficulty_rank).get(&"stars", -1))
+	
 	details_material.albedo_color = Color.TRANSPARENT
 	grade_label.modulate = Color.TRANSPARENT
 	fc_label.modulate = Color.TRANSPARENT
