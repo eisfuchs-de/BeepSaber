@@ -93,10 +93,9 @@ func _on_MainMenu_button_up(pos: Vector3) -> void:
 	set_buttons_disabled(true)
 	mainmenu.emit()
 
-# TODO: duplicates a function in BeepSaberMainMenu.gd
+# TODO: (almost) duplicates a function in BeepSaberMainMenu.gd
 func stars(value: float) -> String:
-	if value < 0.0:
-		return "-"
+	value = clamp(value, 0.0, 5.0)
 	var stars := ("★★★★★".substr(5 - int(value), 5) + "✮".left(fposmod(value, 1) + 0.5) + "☆☆☆☆☆").left(5)
 	return stars
 
