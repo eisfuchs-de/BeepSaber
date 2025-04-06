@@ -365,6 +365,8 @@ func _ready() -> void:
 	UI_AudioEngine.attach_children(self)
 	vr.log_info("BeepSaber search path is " + Constants.APPDATA_PATH)
 	
+	beepsaber_game.current_gamestate.connect(gamestate_changed)
+	
 	playlist_selector.clear()
 	playlist_selector.add_item("All Songs")
 	playlist_selector.add_item("Recently Added")
@@ -501,9 +503,9 @@ func _on_PlaylistSelector_item_selected(id: int) -> void:
 	Settings.selected_playlist = id
 	Settings.save()
 
-func _notification(what: int) -> void:
-	if what == 41:	# NOTIFICATION_ENTER_WORLD - apparently not exposed as a constant name?
-		if visible:
-			# reload chosen song when main menu becomes visible
-			if songs_menu.is_anything_selected():
-				_select_song(songs_menu.get_selected_items()[0])
+func gamestate_changed(name: String) -> void:
+	if name != "mapselection":
+		return
+
+	if songs_menu.is_anything_selected():
+		_select_song(songs_menu.get_selected_items()[0])
