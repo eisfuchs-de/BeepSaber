@@ -510,4 +510,5 @@ func gamestate_changed(name: String) -> void:
 		return
 
 	if songs_menu.is_anything_selected():
-		_select_song(songs_menu.get_selected_items()[0], Map.current_difficulty_set, Map.current_difficulty.difficulty)
+		# refresh playlist to show new stars in the current song
+		_on_PlaylistSelector_item_selected(playlist_selector.get_selected_id())
