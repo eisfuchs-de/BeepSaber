@@ -176,7 +176,7 @@ func _set_cur_playlist(songs: Array[MapInfo]) -> void:
 
 		if currently_selected_map and map.get_key() == currently_selected_map.get_key():
 			songs_menu.select(map_index, true)
-			_select_song(map_index)
+			_select_song(map_index, Map.current_difficulty_set, Map.current_difficulty.difficulty)
 		var filepath := map.filepath + map.cover_image_filename
 		_bg_img_loader.load_texture(filepath, _on_cover_loaded, false, map_index)
 		map_index += 1
@@ -237,7 +237,7 @@ func stars(value: float) -> String:
 	var stars := ("★★★★★".substr(5 - int(value), 5) + "✮".left(fposmod(value, 1) + 0.5) + "☆☆☆☆☆").left(5)
 	return stars
 
-func _select_song(id: int) -> void:
+func _select_song(id: int, select_set := "", select_name := "") -> void:
 	songs_menu.ensure_current_is_visible()
 	delete_button.disabled = false
 	
@@ -290,7 +290,9 @@ func _select_song(id: int) -> void:
 			difficulty_item.set_tooltip_text(0, diff.difficulty + " / " + diff.custom_name)
 			difficulty_item.set_metadata(0, beatmap_id)
 
-			if beatmap_id == 0:
+			# select at least the first item inserted, select again if the currently
+			# inserted item matches the difficulty set and difficulty requested
+			if beatmap_id == 0 or (difficulty_set_name == select_set and difficultiy_name == select_name):
 				diff_menu.set_selected(difficulty_item, 0)
 				diff_menu.set_selected(difficulty_item, 1)
 				_select_difficulty()
@@ -508,4 +510,4 @@ func gamestate_changed(name: String) -> void:
 		return
 
 	if songs_menu.is_anything_selected():
-		_select_song(songs_menu.get_selected_items()[0])
+		_select_song(songs_menu.get_selected_items()[0], Map.current_difficulty_set, Map.current_difficulty.difficulty)
