@@ -5,15 +5,17 @@
 extends Node3D
 class_name BeepSaber_Game
 
+signal current_gamestate(name: String)
+
 var version := "0.5.0"
 
-var gamestate_bootup := GameState.new()
-var gamestate_mapcomplete := GameStateMapComplete.new()
-var gamestate_mapselection := GameStateMapSelection.new()
-var gamestate_newhighscore := GameStateNewHighScore.new()
-var gamestate_paused := GameStatePaused.new()
-var gamestate_playing := GameStatePlaying.new()
-var gamestate_settings := GameStateSettings.new()
+var gamestate_bootup := GameState.new("bootup")
+var gamestate_mapcomplete := GameStateMapComplete.new("mapcomplete")
+var gamestate_mapselection := GameStateMapSelection.new("mapselection")
+var gamestate_newhighscore := GameStateNewHighScore.new("highscore")
+var gamestate_paused := GameStatePaused.new("paused")
+var gamestate_playing := GameStatePlaying.new("playing")
+var gamestate_settings := GameStateSettings.new("settings")
 var gamestate: GameState = gamestate_bootup
 
 @onready var xr_origin := $XROrigin3D as XROrigin3D
@@ -174,6 +176,8 @@ func _transition_game_state(next_state: GameState) -> void:
 
 	gamestate = next_state
 	gamestate._ready(self)
+
+	current_gamestate.emit(gamestate.name)
 
 func show_MapSourceDialogs(showing: bool = true) -> void:
 	map_source_dialogs.visible = showing
