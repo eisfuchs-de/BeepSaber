@@ -418,7 +418,8 @@ func _main_menu_button() -> void:
 	_transition_game_state(gamestate_mapselection)
 
 func _voted(stars: int) -> void:
-	PlayCount.set_stars(Map.current_info, Map.current_difficulty_set, Map.current_difficulty.difficulty_rank, stars)
+	if Map.current_info:
+		PlayCount.set_stars(Map.current_info, Map.current_difficulty_set, Map.current_difficulty.difficulty_rank, stars)
 
 func _unpause_button() -> void:
 	pause_menu.visible = false

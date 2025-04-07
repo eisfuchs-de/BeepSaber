@@ -8,7 +8,7 @@
 [ext_resource type="FontFile" uid="uid://01k27lk2a4bw" path="res://OQ_Toolkit/OQ_UI2D/theme/RobotoMono-Medium.ttf" id="5_v4xkn"]
 [ext_resource type="Material" uid="uid://dqox51k4cngtf" path="res://game/Text.material" id="6_2vw0d"]
 [ext_resource type="Script" path="res://game/scripts/UIRaycast/UIRaycastTarget.gd" id="6_25iqa"]
-[ext_resource type="FontFile" path="res://DejaVuSans.ttf" id="9_fxvia"]
+[ext_resource type="FontFile" uid="uid://dwjy3ym8io3f5" path="res://DejaVuSans.ttf" id="9_fxvia"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_igkn4"]
 render_priority = 0
@@ -1471,5 +1471,4 @@ skeleton = NodePath("")
 
 [connection signal="released" from="Repeat" to="." method="_on_Repeat_button_up"]
 [connection signal="released" from="MainMenu" to="." method="_on_MainMenu_button_up"]
-[connection signal="released" from="Stars" to="." method="_on_Stars_button_released"]
 [connection signal="repeated" from="Stars" to="." method="_on_Stars_button_repeated"]
