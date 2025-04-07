@@ -92,6 +92,11 @@ static func set_colors_from_custom_data() -> void:
 	Map.obstacle_color = get_custom_color(info_data, diff_data, &"_obstacleColor", Color(-1.0, -1.0, -1.0, 0.0))
 
 static func load_map_info(load_path: String) -> MapInfo:
+	var invalid_map := {
+		"_version": "2.0.0",
+		"_songName": "Broken Song",
+	}
+
 	var info_dict := {}
 	var song_folder_files := DirAccess.get_files_at(load_path)
 	for file_name in song_folder_files:
@@ -101,7 +106,8 @@ static func load_map_info(load_path: String) -> MapInfo:
 
 	if (info_dict.is_empty()):
 		vr.log_error("Invalid info.dat found in " + load_path)
-		return null
+		info_dict = invalid_map
+		invalid_map["_songName"] += " Hash: " + load_path.get_base_dir().get_file()
 	
 	if info_dict.has("_version"):
 		return MapInfo.new_v2(info_dict, load_path)
@@ -112,10 +118,12 @@ static func load_map_info(load_path: String) -> MapInfo:
 			return MapInfo.new_v4(info_dict, load_path)
 
 		vr.log_warning("%s is an unsupported beatmap version: %s" % [load_path, info_dict["version"]])
-		return null
+		invalid_map["_songName"] += " Unsupported Version - " + load_path.get_base_dir().get_file()
+		return MapInfo.new_v2(invalid_map, load_path)
 	else:
 		vr.log_warning("%s is an unknown beatmap version" % load_path)
-		return null
+		invalid_map["_songName"] += " Unknown Version - " + load_path.get_base_dir().get_file()
+		return MapInfo.new_v2(invalid_map, load_path)
 
 # speed for the speed gods.  please forgive me for this.
 # - steve hocktail

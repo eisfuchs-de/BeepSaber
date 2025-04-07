@@ -148,8 +148,10 @@ func _discover_all_songs(seek_path: String) -> void:
 			if dir.current_is_dir(): # TODO: or file_name.ends_with(".zip"):
 				var new_dir := seek_path+file_name+"/"
 				var song := Map.load_map_info(new_dir)
-				if song:
-					_all_songs.append(song)
+
+				# no validity check on "song", we want a broken entry to show in the list so
+				# the user can decide to delete it
+				_all_songs.append(song)
 				# record all hashes, even those that have unsupported versions
 				all_song_hashes.append(song.get_hash())
 				# record mapping from keys to hashes
@@ -176,7 +178,8 @@ func _set_cur_playlist(songs: Array[MapInfo]) -> void:
 
 		if currently_selected_map and map.get_key() == currently_selected_map.get_key():
 			songs_menu.select(map_index, true)
-			_select_song(map_index, Map.current_difficulty_set, Map.current_difficulty.difficulty)
+			if Map.current_difficulty:
+				_select_song(map_index, Map.current_difficulty_set, Map.current_difficulty.difficulty)
 		var filepath := map.filepath + map.cover_image_filename
 		_bg_img_loader.load_texture(filepath, _on_cover_loaded, false, map_index)
 		map_index += 1
@@ -269,6 +272,7 @@ func _select_song(id: int, select_set := "", select_name := "") -> void:
 		vr.log_file_error(result, map.filepath + map.song_filename, "BeepSaberMainMenu.gd at line 223 ")
 	
 	diff_menu.clear()
+	$Play_Button.disabled = true
 
 	# empty root item
 	var root := diff_menu.create_item()
@@ -298,6 +302,10 @@ func _select_song(id: int, select_set := "", select_name := "") -> void:
 				_select_difficulty()
 
 			beatmap_id += 1
+	# do not enable play button if ths map is broken
+
+	if beatmap_id:
+		$Play_Button.disabled = false
 
 func _on_stop_prev_timeout() -> void:
 	var song_prev_Tween := song_preview.create_tween().set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
