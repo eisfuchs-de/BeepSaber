@@ -170,7 +170,7 @@ func _transition_game_state(next_state: GameState) -> void:
 	if gamestate == gamestate_playing:
 		save_offset(Map.current_info.get_key())
 
-	if next_state == gamestate_mapselection:
+	if next_state in [gamestate_mapselection, gamestate_mapcomplete, gamestate_newhighscore]:
 		xr_origin.transform.origin.z = 1.0
 		vr.log_info("Set origin back to 1.0")
 
