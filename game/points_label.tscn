@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://deoh1pl5kvqei"]
+[gd_scene load_steps=6 format=3 uid="uid://deoh1pl5kvqei"]
 
 [ext_resource type="Script" path="res://game/points_label.gd" id="2"]
 
@@ -30,24 +30,8 @@ tracks/1/keys = {
 "values": [Vector3(0, 0, 0), Vector3(0.829, 1.184, 1), Vector3(1.191, 0.873, 1), Vector3(1, 1, 1), Vector3(3, 3, 1), Vector3(3, 3, 1), Vector3(0, 0, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_t78ln"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("mesh_instance:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(3, 3, 1)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cdesj"]
 _data = {
-"RESET": SubResource("Animation_t78ln"),
 "hit": SubResource("6")
 }
 
@@ -70,6 +54,6 @@ libraries = {
 }
 
 [node name="mesh_instance" type="MeshInstance3D" parent="."]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0.192368, -0.858462)
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 mesh = SubResource("TextMesh_toqpu")
 skeleton = NodePath("")
