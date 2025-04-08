@@ -101,5 +101,5 @@ func stars(value: float) -> String:
 	return stars
 
 func _on_Stars_button_repeated(pos: Vector3) -> void:
-	voted = int(clamp((pos.x + 0.5) * 6.0, 0.0, 5.0))
+	voted = int(clamp((pos.x + 0.6) * 5.5, 0.0, 5.0))
 	stars_display.text = stars(voted)
