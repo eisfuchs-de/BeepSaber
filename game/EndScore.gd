@@ -27,7 +27,6 @@ func _hide() -> void:
 	collision.disabled = true
 	($Repeat as UIRaycastButton).collision_layer = 0
 	($MainMenu as UIRaycastButton).collision_layer = 0
-	vote.emit(voted)
 	hide()
 
 func show_score(score: int, record: int, percent: float, song_string: String, is_full_combo: bool, is_new_record: bool) -> void:
@@ -103,3 +102,6 @@ func stars(value: float) -> String:
 func _on_Stars_button_repeated(pos: Vector3) -> void:
 	voted = int(clamp((pos.x + 0.6) * 5.5, 0.0, 5.0))
 	stars_display.text = stars(voted)
+
+func _on_Stars_button_released(pos: Vector3) -> void:
+	vote.emit(voted)
