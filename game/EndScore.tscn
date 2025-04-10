@@ -1471,4 +1471,5 @@ skeleton = NodePath("")
 
 [connection signal="released" from="Repeat" to="." method="_on_Repeat_button_up"]
 [connection signal="released" from="MainMenu" to="." method="_on_MainMenu_button_up"]
+[connection signal="released" from="Stars" to="." method="_on_Stars_button_released"]
 [connection signal="repeated" from="Stars" to="." method="_on_Stars_button_repeated"]
