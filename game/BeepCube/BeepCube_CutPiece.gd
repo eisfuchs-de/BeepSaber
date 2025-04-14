@@ -53,6 +53,15 @@ func start_cut(dist_from_center, angle) -> void:
 func set_color(new_color: Color) -> void:
 	mesh.material_override.set_shader_parameter(&"color", new_color)
 	
+	if Settings.simple_shaders:
+		mesh.material_override.set_shader_parameter(&"metallic", 0.3)
+		mesh.material_override.set_shader_parameter(&"roughness", 0.2)
+		mesh.material_override.set_shader_parameter(&"sub_emission_energy", 0.18)
+	else:
+		mesh.material_override.set_shader_parameter(&"metallic", 1.0)
+		mesh.material_override.set_shader_parameter(&"roughness", 0.06)
+		mesh.material_override.set_shader_parameter(&"sub_emission_energy", 0.0)
+
 func set_chain_head(is_chain_head: bool) -> void:
 	mesh.material_override.set_shader_parameter(&"is_chain_head", is_chain_head)
 

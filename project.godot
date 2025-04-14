@@ -129,6 +129,7 @@ ui_end={
 
 3d_render/layer_1="VR"
 3d_render/layer_2="Desktop"
+3d_render/layer_16="Light"
 3d_physics/layer_1="Obstacles"
 3d_physics/layer_2="UI"
 3d_physics/layer_3="Player"

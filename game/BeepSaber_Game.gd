@@ -287,6 +287,14 @@ func _ready() -> void:
 	
 	recenter()
 
+func load_shaders(simple: bool):
+	if simple:
+		$SpotLights.visible = false
+		$ReflectionProbe.visible = false
+	else:
+		$SpotLights.visible = true
+		$ReflectionProbe.visible = true
+
 func on_settings_changed(key: StringName) -> void:
 	# ensures proper initialization of tree for proper first frame setting loading
 	await get_tree().process_frame
@@ -303,6 +311,8 @@ func on_settings_changed(key: StringName) -> void:
 			($WorldEnvironment as WorldEnvironment).environment.glow_enabled = Settings.glare
 		&"player_height_offset":
 			xr_origin.transform.origin.y = Settings.player_height_offset
+		&"simple_shaders":
+			load_shaders(Settings.simple_shaders)
 
 func set_colors_from_settings() -> void:
 	update_saber_colors(Settings.color_left, Settings.color_right)

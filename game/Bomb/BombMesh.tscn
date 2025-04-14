@@ -54,12 +54,12 @@ shadow_mesh = SubResource("ArrayMesh_hv6x3")
 
 [node name="Icosphere" parent="." index="0"]
 transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0, 0)
-layers = 3
+layers = 32771
 material_override = SubResource("StandardMaterial3D_a4ib6")
 
 [node name="Icosphere2" type="MeshInstance3D" parent="." index="1"]
 transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0, 0)
-layers = 3
+layers = 32771
 material_override = SubResource("StandardMaterial3D_ipj5a")
 gi_mode = 0
 mesh = SubResource("ArrayMesh_wgfrt")

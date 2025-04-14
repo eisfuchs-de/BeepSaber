@@ -115,7 +115,7 @@ libraries = {
 
 [node name="BeepCubeMesh" parent="." instance=ExtResource("2_sbb11")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
-layers = 3
+layers = 32771
 material_override = SubResource("ShaderMaterial_gk6d3")
 
 [node name="SliceParticles" parent="." instance=ExtResource("5_tissj")]

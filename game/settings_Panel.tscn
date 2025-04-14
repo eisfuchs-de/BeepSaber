@@ -345,6 +345,13 @@ tooltip_text = "Low Performance impact*"
 theme = SubResource("3")
 text = "*Dynamic Background: "
 
+[node name="simple_shaders" type="CheckButton" parent="ScrollContainer/VBox"]
+layout_mode = 2
+tooltip_text = "Low Performance impact*"
+theme = SubResource("3")
+button_pressed = true
+text = "*Simple Shaders: "
+
 [node name="cut_blocks" type="CheckButton" parent="ScrollContainer/VBox"]
 layout_mode = 2
 tooltip_text = "High Performance impact*"
@@ -644,6 +651,7 @@ scroll_node_path = NodePath("../ScrollContainer")
 [connection signal="value_changed" from="ScrollContainer/VBox/audio/music/music_slider" to="." method="_on_music_slider_value_changed"]
 [connection signal="button_up" from="ScrollContainer/VBox/recenter" to="." method="_on_recenter_button_up"]
 [connection signal="toggled" from="ScrollContainer/VBox/d_background" to="." method="_on_d_background_toggled"]
+[connection signal="toggled" from="ScrollContainer/VBox/simple_shaders" to="." method="_on_simple_shaders_toggled"]
 [connection signal="toggled" from="ScrollContainer/VBox/cut_blocks" to="." method="_on_cut_blocks_toggled"]
 [connection signal="toggled" from="ScrollContainer/VBox/glare" to="." method="_on_glare_toggled"]
 [connection signal="toggled" from="ScrollContainer/VBox/saber_tail" to="." method="_on_saber_tail_toggled"]

@@ -19,6 +19,13 @@ func set_color(color: Color) -> void:
 	material.albedo_color = color
 	material.emission = color
 
+	if Settings.simple_shaders:
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_VERTEX
+		material.roughness = 1.0
+	else:
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.roughness = 0.0
+
 class HistoricalPositions:
 	extends RefCounted
 	

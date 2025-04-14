@@ -56,6 +56,15 @@ func spawn(note_info: ColorNoteInfo, current_beat: float) -> void:
 	
 	rotation.z = Constants.CUBE_ROTATIONS[note_info.cut_direction] + deg_to_rad(note_info.angle_offset)
 	
+	if Settings.simple_shaders:
+		_mat.set_shader_parameter(&"metallic", 0.3)
+		_mat.set_shader_parameter(&"roughness", 0.2)
+		_mat.set_shader_parameter(&"sub_emission_energy", 0.18)
+	else:
+		_mat.set_shader_parameter(&"metallic", 1.0)
+		_mat.set_shader_parameter(&"roughness", 0.06)
+		_mat.set_shader_parameter(&"sub_emission_energy", 0.0)
+
 	piece_left.set_color(color)
 	piece_right.set_color(color)
 	_mat.set_shader_parameter(&"color", color)

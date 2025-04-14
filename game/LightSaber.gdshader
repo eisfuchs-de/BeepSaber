@@ -15,3 +15,7 @@ void fragment() {
 	EMISSION *= vec3(1.0 + st * 60.0);
 }
 
+void light() {
+	DIFFUSE_LIGHT += vec3(0.0);
+}
+
