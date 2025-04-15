@@ -50,9 +50,10 @@ func start_cut(dist_from_center, angle) -> void:
 	mesh.material_override.set_shader_parameter(&"cut_dist_from_center", dist_from_center)
 	mesh.material_override.set_shader_parameter(&"cut_angle", angle)
 
-func set_color(new_color: Color) -> void:
+func set_color(new_color: Color, is_dot = false) -> void:
 	mesh.material_override.set_shader_parameter(&"color", new_color)
-	
+	mesh.material_override.set_shader_parameter(&"is_dot", is_dot)
+
 	if Settings.simple_shaders:
 		mesh.material_override.set_shader_parameter(&"metallic", 0.3)
 		mesh.material_override.set_shader_parameter(&"roughness", 0.2)

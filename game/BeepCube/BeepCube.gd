@@ -65,8 +65,8 @@ func spawn(note_info: ColorNoteInfo, current_beat: float) -> void:
 		_mat.set_shader_parameter(&"roughness", 0.06)
 		_mat.set_shader_parameter(&"sub_emission_energy", 0.0)
 
-	piece_left.set_color(color)
-	piece_right.set_color(color)
+	piece_left.set_color(color, is_dot)
+	piece_right.set_color(color, is_dot)
 	_mat.set_shader_parameter(&"color", color)
 	_mat.set_shader_parameter(&"is_dot", is_dot)
 	# since cube instances get recycled, we gotta reset cubes that were chain
