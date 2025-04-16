@@ -221,6 +221,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("4_ger5h")
 columns = 2
 hide_root = true
+select_mode = 1
 
 [node name="Songs_Label2" type="Label" parent="."]
 layout_mode = 0
