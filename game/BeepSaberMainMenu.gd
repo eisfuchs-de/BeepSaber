@@ -245,6 +245,11 @@ func _select_song(id: int, select_set := "", select_name := "") -> void:
 	delete_button.disabled = false
 	
 	var map := _currently_selected_songlist_ref[id]
+
+	if currently_selected_map:
+		if map.get_hash() == currently_selected_map.get_hash():
+			return
+
 	currently_selected_map = map
 
 	var value : float = PlayCount.get_total_play_count(map)[&"avg_stars"]
