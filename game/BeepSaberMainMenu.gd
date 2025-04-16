@@ -176,7 +176,7 @@ func _set_cur_playlist(songs: Array[MapInfo]) -> void:
 			map.song_name,
 		], default_song_icon)
 
-		if currently_selected_map and map.get_key() == currently_selected_map.get_key():
+		if currently_selected_map and map.get_hash() == currently_selected_map.get_hash():
 			songs_menu.select(map_index, true)
 			if Map.current_difficulty:
 				_select_song(map_index, Map.current_difficulty_set, Map.current_difficulty.difficulty)
