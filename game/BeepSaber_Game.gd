@@ -43,6 +43,7 @@ var gamestate: GameState = gamestate_bootup
 @onready var event_driver := $event_driver as EventDriver
 
 @onready var multiplier_label := $Multiplier_Label as MeshInstance3D
+@onready var statistics_label := $Statistics_Label as MeshInstance3D
 @onready var point_label := $Point_Label as MeshInstance3D
 @onready var percent_indicator := $Percent_Indicator as PercentIndicator
 
@@ -368,6 +369,21 @@ func _display_points() -> void:
 	(point_label.mesh as TextMesh).text = "Score: %6d" % Scoreboard.points
 	(multiplier_label.mesh as TextMesh).text = "x %d\nCombo %d" % [Scoreboard.multiplier, Scoreboard.combo]
 	percent_indicator.update_percent(hit_rate)
+
+	var hits := float(Scoreboard.hits)
+	if hits == 0.0:
+		hits = 0.000001
+
+	(statistics_label.mesh as TextMesh).text = \
+		"Hit: %d Miss: %d Wrong: %d\nBeat Accuracy: %d%%\nCut Angle: %d%%\nCut Distance: %d%%\nTravel Distance: %0.0f" % [
+			int(hits),
+			Scoreboard.misses,
+			Scoreboard.wrong_sabers,
+			Scoreboard.cumulated_beat_accuracy / hits * 100.0,
+			Scoreboard.cumulated_cut_angle / hits * 100.0,
+			Scoreboard.cumulated_cut_distance / hits * 100.0,
+			Scoreboard.cumulated_travel_distance / hits * 100.0,
+		]
 
 # accessor method for the player name selector UI element
 func _name_selector() -> NameSelector:

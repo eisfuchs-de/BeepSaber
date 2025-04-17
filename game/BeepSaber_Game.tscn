@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://dqb3ybvpsfcbw"]
+[gd_scene load_steps=45 format=3 uid="uid://dqb3ybvpsfcbw"]
 
 [ext_resource type="PackedScene" uid="uid://cs8e62lsifik5" path="res://game/floor.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://d04fmtjhjx4oy" path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel.tscn" id="2"]
@@ -73,6 +73,18 @@ Combo 000"
 font_size = 10
 horizontal_alignment = 0
 vertical_alignment = 0
+depth = 0.0
+
+[sub_resource type="TextMesh" id="TextMesh_i5wa8"]
+text = "Hit: 0 Miss: 0 Wrong: 0
+Beat Accuracy: 0%
+Cut Accuracy: 0%
+Cut Distance: 0%
+Travel Distance: 0.00"
+font_size = 4
+horizontal_alignment = 0
+vertical_alignment = 0
+line_spacing = -2.0
 depth = 0.0
 
 [sub_resource type="TextMesh" id="TextMesh_0bbpk"]
@@ -182,6 +194,12 @@ song_uploader_ref = NodePath("../../SongUploader")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 1.375, -2.5)
 material_override = ExtResource("13_3xkki")
 mesh = SubResource("TextMesh_cx1im")
+skeleton = NodePath("")
+
+[node name="Statistics_Label" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 1.11768, -2.5)
+material_override = ExtResource("13_3xkki")
+mesh = SubResource("TextMesh_i5wa8")
 skeleton = NodePath("")
 
 [node name="Point_Label" type="MeshInstance3D" parent="."]
