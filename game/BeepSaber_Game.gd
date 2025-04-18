@@ -200,6 +200,7 @@ func _submit_highscore(player_name: String) -> void:
 			Scoreboard.points)
 			
 		_transition_game_state(gamestate_mapcomplete)
+		highscore_panel.load_highscores(Map.current_info,Map.current_difficulty.difficulty_rank)
 
 func _check_and_update_saber(controller: BeepSaberController, saber: LightSaber) -> void:
 	# to allow extending/sheething the saber while not playing a song
