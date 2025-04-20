@@ -69,7 +69,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="RankLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow"]
-custom_minimum_size = Vector2(50, 0)
+custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "1."
@@ -79,190 +79,15 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Player 1"
 clip_text = true
+text_overrun_behavior = 3
 
 [node name="ScoreLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow"]
 layout_mode = 2
 text = "100000"
 
-[node name="BaseRecordRow2" type="HBoxContainer" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList"]
+[node name="DateLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow"]
 layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="RankLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow2"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "2."
-
-[node name="NameLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow2"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "I have a long name"
-clip_text = true
-
-[node name="ScoreLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow2"]
-layout_mode = 2
-text = "10000"
-
-[node name="BaseRecordRow3" type="HBoxContainer" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="RankLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow3"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "3."
-
-[node name="NameLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow3"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "I have an extremely long name that goes of the page"
-clip_text = true
-
-[node name="ScoreLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow3"]
-layout_mode = 2
-text = "1000"
-
-[node name="BaseRecordRow4" type="HBoxContainer" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="RankLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow4"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "4."
-
-[node name="NameLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow4"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Player 1"
-clip_text = true
-
-[node name="ScoreLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow4"]
-layout_mode = 2
-text = "1000"
-
-[node name="BaseRecordRow5" type="HBoxContainer" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="RankLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow5"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "5."
-
-[node name="NameLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow5"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Player 1"
-clip_text = true
-
-[node name="ScoreLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow5"]
-layout_mode = 2
-text = "1000"
-
-[node name="BaseRecordRow6" type="HBoxContainer" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="RankLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow6"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "6."
-
-[node name="NameLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow6"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Player 1"
-clip_text = true
-
-[node name="ScoreLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow6"]
-layout_mode = 2
-text = "1000"
-
-[node name="BaseRecordRow7" type="HBoxContainer" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="RankLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow7"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "7."
-
-[node name="NameLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow7"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Player 1"
-clip_text = true
-
-[node name="ScoreLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow7"]
-layout_mode = 2
-text = "1000"
-
-[node name="BaseRecordRow8" type="HBoxContainer" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="RankLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow8"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "8."
-
-[node name="NameLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow8"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Player 1"
-clip_text = true
-
-[node name="ScoreLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow8"]
-layout_mode = 2
-text = "1000"
-
-[node name="BaseRecordRow9" type="HBoxContainer" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="RankLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow9"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "9."
-
-[node name="NameLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow9"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Player 1"
-clip_text = true
-
-[node name="ScoreLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow9"]
-layout_mode = 2
-text = "1000"
-
-[node name="BaseRecordRow10" type="HBoxContainer" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="RankLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow10"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "10."
-
-[node name="NameLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow10"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Player 1"
-clip_text = true
-
-[node name="ScoreLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow10"]
-layout_mode = 2
-text = "1000"
+text = "  2025-04-20 17:12"
 
 [node name="VBox" type="VBoxContainer" parent="Margin/VBox/LeftRight"]
 layout_mode = 2

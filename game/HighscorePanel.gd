@@ -37,11 +37,21 @@ func load_highscores(map_info: MapInfo, diff_rank: int):
 	var idx = 1
 	for record in records:
 		# build a new row and populate fields from record
+		var date_time := Time.get_datetime_dict_from_unix_time(record.epoch_time)
+		var date_time_str := "  %04d-%02d-%02d %02d:%02d" % [
+			date_time["year"],
+			date_time["month"],
+			date_time["day"],
+			date_time["hour"],
+			date_time["minute"],
+		]
+
 		var new_row = _base_row.duplicate()
 		new_row.get_child(0).text = "%d." % idx
 		new_row.get_child(1).text = record.player_name
 		new_row.get_child(2).text = str(record.score)
-		
+		new_row.get_child(3).text = date_time_str
+	
 		_highscore_list.add_child(new_row)
 		idx += 1
 		
