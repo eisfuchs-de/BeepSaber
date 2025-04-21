@@ -120,6 +120,10 @@ var simple_shaders: bool:
 	set(value):
 		simple_shaders = value
 		set_and_emit(&"simple_shaders", value)
+var antialias: int:
+	set(value):
+		antialias = value
+		set_and_emit(&"antialias", value)
 
 func _ready() -> void:
 	if OS.get_name() in platform_default_values.keys():
@@ -173,6 +177,7 @@ var default_values = {
 	spectator_hud = true,
 	selected_playlist = 1,
 	simple_shaders = true,
+	antialias = 0,
 }
 
 func cast_or_default(key: String, to_type: int = -1) -> Variant:
@@ -254,6 +259,7 @@ func load_old_config() -> void:
 	player_height_offset = Utils.get_float(settings_dict, "player_height_offset", 0.0)
 	selected_playlist = int(Utils.get_float(settings_dict, "selected_playlist", 1.0))
 	simple_shaders = Utils.get_bool(settings_dict, "simple_shaders", true)
+	antialias = int(Utils.get_float(settings_dict, "antialias", 0.0))
 
 func save() -> void:
 	var error := config.save(CONFIG_PATH)

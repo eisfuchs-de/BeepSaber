@@ -297,6 +297,14 @@ func load_shaders(simple: bool):
 		$SpotLights.visible = true
 		$ReflectionProbe.visible = true
 
+func set_antialias(value: int):
+	get_viewport().msaa_3d = [
+		RenderingServer.VIEWPORT_MSAA_DISABLED,
+		RenderingServer.VIEWPORT_MSAA_2X,
+		RenderingServer.VIEWPORT_MSAA_4X,
+		RenderingServer.VIEWPORT_MSAA_8X,
+	][value]
+
 func on_settings_changed(key: StringName) -> void:
 	# ensures proper initialization of tree for proper first frame setting loading
 	await get_tree().process_frame
@@ -315,6 +323,8 @@ func on_settings_changed(key: StringName) -> void:
 			xr_origin.transform.origin.y = Settings.player_height_offset
 		&"simple_shaders":
 			load_shaders(Settings.simple_shaders)
+		&"antialias":
+			set_antialias(Settings.antialias)
 
 func set_colors_from_settings() -> void:
 	update_saber_colors(Settings.color_left, Settings.color_right)

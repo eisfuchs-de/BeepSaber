@@ -11,6 +11,7 @@ signal apply()
 @onready var cut_blocks := $ScrollContainer/VBox/cut_blocks as CheckButton
 @onready var d_background := $ScrollContainer/VBox/d_background as CheckButton
 @onready var simple_shaders := $ScrollContainer/VBox/simple_shaders as CheckButton
+@onready var antialias_option := $ScrollContainer/VBox/antialias_box/antialias_option as OptionButton
 @onready var left_saber_col := $ScrollContainer/VBox/SaberColorsRow/left_saber_col as ColorPickerButton
 @onready var right_saber_col := $ScrollContainer/VBox/SaberColorsRow/right_saber_col as ColorPickerButton
 @onready var show_debug_control := $ScrollContainer/VBox/show_debug as CheckButton
@@ -69,6 +70,7 @@ func set_controls_from_settings() -> void:
 	glare_control.button_pressed = Settings.glare
 	d_background.button_pressed = Settings.events
 	simple_shaders.button_pressed = Settings.events
+	antialias_option.selected = Settings.antialias
 	saber_control.select(Settings.saber_visual)
 	show_debug_control.button_pressed = Settings.show_debug_info
 	mixed_reality_control.button_pressed = Settings.mixed_reality
@@ -129,6 +131,9 @@ func _on_d_background_toggled(button_pressed: bool) -> void:
 
 func _on_simple_shaders_toggled(button_pressed: bool) -> void:
 	Settings.simple_shaders = button_pressed
+
+func _on_antialias_selected(value: int) -> void:
+	Settings.antialias = value
 
 func _on_saber_item_selected(index: int) -> void:
 	Settings.saber_visual = index
