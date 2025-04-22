@@ -46,6 +46,7 @@ var gamestate: GameState = gamestate_bootup
 @onready var statistics_label := $Statistics_Label as MeshInstance3D
 @onready var point_label := $Point_Label as MeshInstance3D
 @onready var percent_indicator := $Percent_Indicator as PercentIndicator
+@onready var progress_bar := $Progress_Bar as ProgressBarIndicator
 
 @onready var map_source_dialogs := $MapSourceDialogs as Node3D
 @onready var online_search_keyboard := $Keyboard_online_search as OQ_UI2DKeyboard
@@ -161,6 +162,10 @@ func start_map(info: MapInfo, map_difficulty: DifficultyInfo) -> void:
 	
 	_display_points()
 	percent_indicator.start_map()
+
+	progress_bar.set_mode(ProgressBarIndicator.DisplayMode.MinutesSeconds)
+	progress_bar.set_max_value(song_player.stream.get_length())
+	progress_bar.set_value(0.0)
 	
 	_clear_track()
 	_transition_game_state(gamestate_playing)
@@ -239,6 +244,9 @@ func _physics_process(_dt: float) -> void:
 	
 	_check_and_update_saber(left_controller, left_saber)
 	_check_and_update_saber(right_controller, right_saber)
+
+	if song_player.playing:
+		progress_bar.set_value(song_player.get_playback_position())
 
 func _enter_tree() -> void:
 	GlobalReferences.main_game_scene = self

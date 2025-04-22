@@ -1,0 +1,31 @@
+[gd_scene load_steps=7 format=3 uid="uid://k08o33hhvnvd"]
+
+[ext_resource type="Script" path="res://game/progress_bar.gd" id="1_8ebvy"]
+[ext_resource type="Shader" path="res://ProgressBar.gdshader" id="2_l2lhy"]
+[ext_resource type="Material" uid="uid://dqox51k4cngtf" path="res://game/Text.material" id="3_4tdjp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2fqbh"]
+render_priority = 0
+shader = ExtResource("2_l2lhy")
+shader_parameter/how_full = 0.3
+
+[sub_resource type="QuadMesh" id="QuadMesh_tjgx8"]
+
+[sub_resource type="TextMesh" id="TextMesh_xnt21"]
+text = "0:12 / 3:56"
+font_size = 10
+depth = 0.0
+
+[node name="Progress_Bar" type="Node3D"]
+script = ExtResource("1_8ebvy")
+
+[node name="Bar" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_2fqbh")
+mesh = SubResource("QuadMesh_tjgx8")
+
+[node name="Label" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.113727, 0)
+material_override = ExtResource("3_4tdjp")
+mesh = SubResource("TextMesh_xnt21")
+skeleton = NodePath("../Bar")
