@@ -10,7 +10,6 @@ enum DisplayMode {
 var how_full := 0.0
 var max_full := 1.0
 
-var bar : QuadMesh
 var label: TextMesh
 var shader: ShaderMaterial
 
@@ -18,7 +17,6 @@ var mode: DisplayMode = DisplayMode.Value
 
 func _ready() -> void:
 	var bar_instance = $Bar as MeshInstance3D
-	bar = bar_instance.mesh as QuadMesh
 	shader = bar_instance.material_override as ShaderMaterial
 
 	var label_instance = $Label as MeshInstance3D
