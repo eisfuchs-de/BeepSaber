@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://k08o33hhvnvd"]
 
 [ext_resource type="Script" path="res://game/progress_bar.gd" id="1_8ebvy"]
-[ext_resource type="Shader" path="res://ProgressBar.gdshader" id="2_l2lhy"]
+[ext_resource type="Shader" path="res://game/ProgressBar.gdshader" id="2_l2lhy"]
 [ext_resource type="Material" uid="uid://dqox51k4cngtf" path="res://game/Text.material" id="3_4tdjp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2fqbh"]
