@@ -77,7 +77,7 @@ vertical_alignment = 0
 depth = 0.0
 
 [sub_resource type="TextMesh" id="TextMesh_i5wa8"]
-text = "Hit: 0 Miss: 0 Wrong: 0
+text = "Hit: 0 Miss: 0 Wrong: 0 Bombs: 0
 Beat Accuracy: 0%
 Cut Accuracy: 0%
 Cut Distance: 0%

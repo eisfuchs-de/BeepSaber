@@ -16,6 +16,7 @@ var cuts: float
 var hits: int
 var misses: int
 var wrong_sabers: int
+var bombs
 var cumulated_beat_accuracy: float
 var cumulated_cut_angle: float
 var cumulated_cut_distance: float
@@ -35,6 +36,7 @@ func restart() -> void:
 	hits = 0
 	misses = 0
 	wrong_sabers = 0
+	bombs = 0
 	cumulated_beat_accuracy = 0.0
 	cumulated_cut_angle = 0.0
 	cumulated_cut_distance = 0.0
@@ -88,5 +90,7 @@ func bad_cut(position: Vector3, description: String) -> void:
 	# statistics
 	if description == "wrong saber":
 		wrong_sabers += 1
+	elif description == "bomb":
+		bombs += 1
 	else:
 		misses += 1

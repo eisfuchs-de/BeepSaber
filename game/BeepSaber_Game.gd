@@ -394,10 +394,11 @@ func _display_points() -> void:
 		hits = 0.000001
 
 	(statistics_label.mesh as TextMesh).text = \
-		"Hit: %d Miss: %d Wrong: %d\nBeat Accuracy: %d%%\nCut Angle: %d%%\nCut Distance: %d%%\nTravel Distance: %0.0f" % [
+		"Hit: %d Miss: %d Wrong: %d Bombs: %s\nBeat Accuracy: %d%%\nCut Angle: %d%%\nCut Distance: %d%%\nTravel Distance: %0.0f" % [
 			int(hits),
 			Scoreboard.misses,
 			Scoreboard.wrong_sabers,
+			Scoreboard.bombs,
 			Scoreboard.cumulated_beat_accuracy / hits * 100.0,
 			Scoreboard.cumulated_cut_angle / hits * 100.0,
 			Scoreboard.cumulated_cut_distance / hits * 100.0,
