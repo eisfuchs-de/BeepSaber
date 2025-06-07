@@ -77,6 +77,9 @@ var _in_wall := false
 
 # location to store the custom offsets on the filesystem
 const OFFSETS_FILEPATH = "user://custom_offsets.json"
+var ORIGIN_OFFSET_MIN = 0.0
+var ORIGIN_OFFSET_DEFAULT = 1.0
+var ORIGIN_OFFSET_MAX = 2.0
 
 # custom origin for the currently playing map
 var origin_offset : float
@@ -93,13 +96,13 @@ func load_offset(song_key : String) -> float:
 		var json_res := JSON.parse_string(text) as Dictionary
 		if json_res:
 			if json_res.has(song_key):
-				return json_res[song_key]
-			return 1.0
+				return clamp(json_res[song_key], ORIGIN_OFFSET_MIN, ORIGIN_OFFSET_MAX)
+			return ORIGIN_OFFSET_DEFAULT
 
 	else:
 		vr.log_warning("Failed read offsets from %s (might not exist yet)" % OFFSETS_FILEPATH)
 
-	return 1.0
+	return ORIGIN_OFFSET_DEFAULT
 
 # save custom origin offset to filesystem
 func save_offset(song_key : String) -> void:
@@ -230,7 +233,7 @@ func _check_and_update_saber(controller: BeepSaberController, saber: LightSaber)
 
 	if song_player.playing and controller == left_controller:
 		origin_offset -= controller.stick_position().y * 0.02
-		xr_origin.transform.origin.z = clamp(origin_offset, 0.0, 2.0)
+		xr_origin.transform.origin.z = clamp(origin_offset, ORIGIN_OFFSET_MIN, ORIGIN_OFFSET_MAX)
 
 func _physics_process(_dt: float) -> void:
 	if debug_info_label.visible:
