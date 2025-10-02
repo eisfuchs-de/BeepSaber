@@ -52,7 +52,7 @@ func is_new_highscore(map_info: MapInfo, diff_rank: int, score: int) -> bool:
 # score : integer score to store
 #
 # return : None
-func add_highscore(map_info: MapInfo, diff_rank: int, player_name: String, score: int, percent: float) -> void:
+func add_highscore(map_info: MapInfo, diff_rank: int, player_name: String, score: int, percent: float) -> int:
 	# get existing records for song + difficulty
 	var hs_key := map_info.get_key()
 	var records := _get_records(hs_key,diff_rank)
@@ -72,6 +72,8 @@ func add_highscore(map_info: MapInfo, diff_rank: int, player_name: String, score
 	_hs_table[hs_key][str(diff_rank)] = records
 	
 	save_hs_table()
+
+	return records.find(record)
 
 # return : the list of records for the given map + difficulty
 func get_records(map_info: MapInfo, diff_rank: int) -> Array:

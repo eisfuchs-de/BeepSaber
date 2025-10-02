@@ -201,7 +201,7 @@ func show_MapSourceDialogs(showing: bool = true) -> void:
 # call this method to submit a new highscore to the database
 func _submit_highscore(player_name: String) -> void:
 	if gamestate == gamestate_newhighscore:
-		Highscores.add_highscore(
+		var rank := Highscores.add_highscore(
 			Map.current_info,
 			Map.current_difficulty.difficulty_rank,
 			player_name,
@@ -209,7 +209,7 @@ func _submit_highscore(player_name: String) -> void:
 			percent_indicator.how_full)
 			
 		_transition_game_state(gamestate_mapcomplete)
-		highscore_panel.load_highscores(Map.current_info,Map.current_difficulty.difficulty_rank)
+		highscore_panel.load_highscores(Map.current_info, Map.current_difficulty.difficulty_rank, rank)
 
 func _check_and_update_saber(controller: BeepSaberController, saber: LightSaber) -> void:
 	# to allow extending/sheething the saber while not playing a song

@@ -19,7 +19,7 @@ func _ready() -> void:
 	_exit_button.visible = show_close_button
 	_song_info_panel.visible = show_song_info
 
-func load_highscores(map_info: MapInfo, diff_rank: int):
+func load_highscores(map_info: MapInfo, diff_rank: int, highlight_rank: int = -1):
 	# clear the high score list
 	_clear_list()
 	
@@ -58,6 +58,11 @@ func load_highscores(map_info: MapInfo, diff_rank: int):
 		new_row.get_child(4).text = date_time_str
 	
 		_highscore_list.add_child(new_row)
+
+		if highlight_rank + 1 == idx:
+			var label: Label = new_row.get_child(1)
+			label.add_theme_color_override("font_color", Color(1, 0.5, 0))
+
 		idx += 1
 		
 func set_title(title_text):
