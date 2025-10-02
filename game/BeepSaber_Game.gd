@@ -205,7 +205,8 @@ func _submit_highscore(player_name: String) -> void:
 			Map.current_info,
 			Map.current_difficulty.difficulty_rank,
 			player_name,
-			Scoreboard.points)
+			Scoreboard.points,
+			percent_indicator.how_full)
 			
 		_transition_game_state(gamestate_mapcomplete)
 		highscore_panel.load_highscores(Map.current_info,Map.current_difficulty.difficulty_rank)

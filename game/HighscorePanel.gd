@@ -37,6 +37,10 @@ func load_highscores(map_info: MapInfo, diff_rank: int):
 	var idx = 1
 	for record in records:
 		# build a new row and populate fields from record
+		var percent_str := "-"
+		if record.has("percent"):
+			percent_str = "%d%%" % [ int(record.percent * 100.0) ]
+
 		var date_time := Time.get_datetime_dict_from_unix_time(record.epoch_time)
 		var date_time_str := "  %04d-%02d-%02d %02d:%02d" % [
 			date_time["year"],
@@ -50,7 +54,8 @@ func load_highscores(map_info: MapInfo, diff_rank: int):
 		new_row.get_child(0).text = "%d." % idx
 		new_row.get_child(1).text = record.player_name
 		new_row.get_child(2).text = str(record.score)
-		new_row.get_child(3).text = date_time_str
+		new_row.get_child(3).text = percent_str
+		new_row.get_child(4).text = date_time_str
 	
 		_highscore_list.add_child(new_row)
 		idx += 1

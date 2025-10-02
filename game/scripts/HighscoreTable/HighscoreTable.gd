@@ -52,13 +52,13 @@ func is_new_highscore(map_info: MapInfo, diff_rank: int, score: int) -> bool:
 # score : integer score to store
 #
 # return : None
-func add_highscore(map_info: MapInfo, diff_rank: int ,player_name: String, score: int) -> void:
+func add_highscore(map_info: MapInfo, diff_rank: int, player_name: String, score: int, percent: float) -> void:
 	# get existing records for song + difficulty
 	var hs_key := map_info.get_key()
 	var records := _get_records(hs_key,diff_rank)
 	
 	# construct a new record and resort the list
-	var record := _make_record(score,player_name)
+	var record := _make_record(score, player_name, percent)
 	records.append(record)
 	records.sort_custom(_highest_and_oldest)
 	
@@ -138,15 +138,16 @@ func _get_records(hs_key: String, diff_rank: int) -> Array:
 func _is_new_highscore(hs_key: String, diff_rank: int, score: int) -> bool:
 	var records := _get_records(hs_key,diff_rank)
 	# make a temporary record just for lookup purposes
-	var temp_record := _make_record(score,"**TEMP_PLAYER**")
+	var temp_record := _make_record(score, "**TEMP_PLAYER**", 0.0)
 	return _get_insert_index(records,temp_record) < MAX_RECORDS_PER_KEY
 
 # creates a "record" structure for storage in the highscore table
-func _make_record(score: int, player_name: String) -> Dictionary:
+func _make_record(score: int, player_name: String, percent: float) -> Dictionary:
 	return {
 		"score" : score,
 		"player_name" : player_name,
-		"epoch_time" : Time.get_unix_time_from_system()
+		"epoch_time" : Time.get_unix_time_from_system(),
+		"percent" : percent,
 	}
 
 # records: the list of records for a given (song + diff_rank)
@@ -157,11 +158,18 @@ func _get_insert_index(records: Array, record: Dictionary) -> int:
 static func _highest_and_oldest(lhs: Dictionary, rhs: Dictionary) -> bool:
 	if lhs.score > rhs.score:
 		return true
-	elif lhs.score < rhs.score:
+	if lhs.score < rhs.score:
 		return false
-	else:
-		#  Older score's should be sorted with higher precedance
-		# than newer scores.
-		if lhs.epoch_time < rhs.epoch_time:
-			return true
+
+	# Older scores should be sorted with higher precedance
+	# than newer scores.
+	if lhs.epoch_time < rhs.epoch_time:
+		return true
+	if lhs.epoch_time > rhs.epoch_time:
+		return false
+
+	# In case everything else is the same, give higher percentages precendence
+	if lhs.percent > rhs.percent:
+		return true
+
 	return false

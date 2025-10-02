@@ -85,6 +85,12 @@ text_overrun_behavior = 3
 layout_mode = 2
 text = "100000"
 
+[node name="PercentLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow"]
+custom_minimum_size = Vector2(46, 0)
+layout_mode = 2
+text = "-"
+horizontal_alignment = 2
+
 [node name="DateLabel" type="Label" parent="Margin/VBox/LeftRight/ScrollContainer/Margin/HighscoresList/BaseRecordRow"]
 layout_mode = 2
 text = "  2025-04-20 17:12"
