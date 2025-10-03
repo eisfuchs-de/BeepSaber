@@ -12,7 +12,7 @@ var ROTATION_UNIT_VECTORS := PackedVector2Array([
 	Vector2(-0.70710678, -0.70710678), Vector2(0.70710678, -0.70710678), Vector2(0,1)
 ])
 const APPDATA_PATH := "user://OpenSaber/"
-var APPDATA_BACKUP_PATH := "user://backup/" 
+var APPDATA_BACKUP_PATH := "user://backup/"
 var APP_PACKAGE_NAME := ""
 
 func _ready() -> void:
