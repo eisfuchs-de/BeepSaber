@@ -12,3 +12,16 @@ var ROTATION_UNIT_VECTORS := PackedVector2Array([
 	Vector2(-0.70710678, -0.70710678), Vector2(0.70710678, -0.70710678), Vector2(0,1)
 ])
 const APPDATA_PATH := "user://OpenSaber/"
+var APPDATA_BACKUP_PATH := "user://backup/" 
+var APP_PACKAGE_NAME := ""
+
+func _ready() -> void:
+	if OS.get_name() == "Android":
+		# /data/data/org.godotengine.open_saber/files/ => org.godotengine.open_saber
+		APP_PACKAGE_NAME = ProjectSettings.globalize_path("user://").split("/")[3]
+
+		# => /sdcard/Android/data/org.godotengine.open_saber/files/backup
+		APPDATA_BACKUP_PATH = "/sdcard/Android/data/" + APP_PACKAGE_NAME + "/files/backup"
+
+		print(ProjectSettings.globalize_path("user://"))
+		print(APPDATA_BACKUP_PATH)

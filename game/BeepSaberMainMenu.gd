@@ -525,3 +525,31 @@ func gamestate_changed(name: String) -> void:
 	if songs_menu.is_anything_selected():
 		# refresh playlist to show new stars in the current song
 		_on_PlaylistSelector_item_selected(playlist_selector.get_selected_id())
+
+func backup_data_files() -> void:
+	if DirAccess.make_dir_recursive_absolute(Constants.APPDATA_BACKUP_PATH) != OK:
+		print("make backup dir ", Constants.APPDATA_BACKUP_PATH, " failed")
+		return
+
+	for file_name in [
+		"highscores.json",
+		"custom_offsets.json",
+		"play_count.json",
+		"config.ini",
+	]:
+		print("backing up ", file_name)
+		DirAccess.copy_absolute("user://" + file_name, Constants.APPDATA_BACKUP_PATH + file_name)
+
+func restore_data_files() -> void:
+	if not DirAccess.dir_exists_absolute(Constants.APPDATA_BACKUP_PATH):
+		print("backup dir ", Constants.APPDATA_BACKUP_PATH, " does not exist")
+		return
+
+	for file_name in [
+		"highscores.json",
+		"custom_offsets.json",
+		"play_count.json",
+		"config.ini",
+	]:
+		print("restoring ", file_name)
+		DirAccess.copy_absolute(Constants.APPDATA_BACKUP_PATH + file_name, "user://" + file_name)
