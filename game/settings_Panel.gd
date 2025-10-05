@@ -4,41 +4,41 @@ class_name SettingsPanel
 signal apply()
 @export var beepsaber_game : BeepSaber_Game
 
-@onready var saber_control := $ScrollContainer/VBox/SaberTypeRow/saber as OptionButton
-@onready var glare_control := $ScrollContainer/VBox/glare as CheckButton
-@onready var saber_tail_control := $ScrollContainer/VBox/saber_tail as CheckButton
-@onready var saber_thickness := $ScrollContainer/VBox/SaberThicknessRow/saber_thickness as HSlider
-@onready var cut_blocks := $ScrollContainer/VBox/cut_blocks as CheckButton
-@onready var d_background := $ScrollContainer/VBox/d_background as CheckButton
-@onready var simple_shaders := $ScrollContainer/VBox/simple_shaders as CheckButton
-@onready var antialias_option := $ScrollContainer/VBox/antialias_box/antialias_option as OptionButton
-@onready var left_saber_col := $ScrollContainer/VBox/SaberColorsRow/left_saber_col as ColorPickerButton
-@onready var right_saber_col := $ScrollContainer/VBox/SaberColorsRow/right_saber_col as ColorPickerButton
-@onready var show_debug_control := $ScrollContainer/VBox/show_debug as CheckButton
-@onready var mixed_reality_control := $ScrollContainer/VBox/mixed_reality as CheckButton
-@onready var explain_control := $ScrollContainer/VBox/explain as CheckButton
-@onready var show_collisions := $ScrollContainer/VBox/show_collisions as CheckButton
-@onready var bombs_enabled_control := $ScrollContainer/VBox/bombs_enabled as CheckButton
-@onready var ui_volume_slider := $ScrollContainer/VBox/UI_VolumeRow/ui_volume_slider as HSlider
-@onready var disable_map_color_control := $ScrollContainer/VBox/disable_map_color as CheckButton
-@onready var left_saber_posx_control := $ScrollContainer/VBox/left_saber_offset/posx as SpinBox
-@onready var left_saber_posy_control := $ScrollContainer/VBox/left_saber_offset/posy as SpinBox
-@onready var left_saber_posz_control := $ScrollContainer/VBox/left_saber_offset/posz as SpinBox
-@onready var left_saber_rotx_control := $ScrollContainer/VBox/left_saber_offset/rotx as SpinBox
-@onready var left_saber_roty_control := $ScrollContainer/VBox/left_saber_offset/roty as SpinBox
-@onready var left_saber_rotz_control := $ScrollContainer/VBox/left_saber_offset/rotz as SpinBox
-@onready var right_saber_posx_control := $ScrollContainer/VBox/right_saber_offset/posx as SpinBox
-@onready var right_saber_posy_control := $ScrollContainer/VBox/right_saber_offset/posy as SpinBox
-@onready var right_saber_posz_control := $ScrollContainer/VBox/right_saber_offset/posz as SpinBox
-@onready var right_saber_rotx_control := $ScrollContainer/VBox/right_saber_offset/rotx as SpinBox
-@onready var right_saber_roty_control := $ScrollContainer/VBox/right_saber_offset/roty as SpinBox
-@onready var right_saber_rotz_control := $ScrollContainer/VBox/right_saber_offset/rotz as SpinBox
-@onready var player_height_offset_control := $ScrollContainer/VBox/player_height_offset/pos as SpinBox
-@onready var audio_master_control := $ScrollContainer/VBox/audio/master/master_slider as HSlider
-@onready var audio_music_control := $ScrollContainer/VBox/audio/music/music_slider as HSlider
-@onready var audio_sfx_control := $ScrollContainer/VBox/audio/sfx/sfx_slider as HSlider
-@onready var spectator_view_control := $ScrollContainer/VBox/spectator_view as CheckButton
-@onready var spectator_hud_control := $ScrollContainer/VBox/spectator_hud as CheckButton
+var saber_control: OptionButton
+var glare_control: CheckButton
+var saber_tail_control: CheckButton
+var saber_thickness: HSlider
+var cut_blocks: CheckButton
+var d_background: CheckButton
+var simple_shaders: CheckButton
+var antialias_option: OptionButton
+var left_saber_col: ColorPickerButton
+var right_saber_col: ColorPickerButton
+var show_debug_control: CheckButton
+var mixed_reality_control: CheckButton
+var explain_control: CheckButton
+var show_collisions: CheckButton
+var bombs_enabled_control: CheckButton
+var ui_volume_slider: HSlider
+var disable_map_color_control: CheckButton
+var left_saber_posx_control: SpinBox
+var left_saber_posy_control: SpinBox
+var left_saber_posz_control: SpinBox
+var left_saber_rotx_control: SpinBox
+var left_saber_roty_control: SpinBox
+var left_saber_rotz_control: SpinBox
+var right_saber_posx_control: SpinBox
+var right_saber_posy_control: SpinBox
+var right_saber_posz_control: SpinBox
+var right_saber_rotx_control: SpinBox
+var right_saber_roty_control: SpinBox
+var right_saber_rotz_control: SpinBox
+var player_height_offset_control: SpinBox
+var audio_master_control: HSlider
+var audio_music_control: HSlider
+var audio_sfx_control: HSlider
+var spectator_view_control: CheckButton
+var spectator_hud_control: CheckButton
 
 var _play_ui_sound_demo := false
 
@@ -48,11 +48,50 @@ func _ready() -> void:
 	set_controls_from_settings()
 	_play_ui_sound_demo = true
 	
-	if OS.get_name() == &"Web":
-		# way too heavy for webxr
-		$ScrollContainer/VBox/glare.hide()
-
 func set_controls_from_settings() -> void:
+	saber_control = find_child("saber")
+	saber_thickness = find_child("saber_thickness")
+	saber_tail_control = find_child("saber_tail")
+	left_saber_col = find_child("left_saber_col")
+	right_saber_col = find_child("right_saber_col")
+
+	cut_blocks = find_child("cut_blocks")
+	show_collisions = find_child("show_collisions")
+	glare_control = find_child("glare")
+	d_background = find_child("d_background")
+	simple_shaders = find_child("simple_shaders")
+	antialias_option = find_child("antialias_option")
+	disable_map_color_control = find_child("disable_map_color")
+
+	mixed_reality_control = find_child("mixed_reality")
+	explain_control = find_child("explain")
+	show_debug_control = find_child("show_debug")
+	player_height_offset_control = find_child("player_height_offset")
+	bombs_enabled_control = find_child("bombs_enabled")
+	spectator_view_control = find_child("spectator_view")
+	spectator_hud_control = find_child("spectator_hud")
+
+	audio_master_control = find_child("master_slider")
+	ui_volume_slider = find_child("ui_volume_slider")
+	audio_music_control = find_child("music_slider")
+	audio_sfx_control = find_child("sfx_slider")
+
+	var left_saber: HBoxContainer = find_child("left_saber_offset")
+	left_saber_posx_control = left_saber.find_child("posx")
+	left_saber_posy_control = left_saber.find_child("posy")
+	left_saber_posz_control = left_saber.find_child("posz")
+	left_saber_rotx_control = left_saber.find_child("rotx")
+	left_saber_roty_control = left_saber.find_child("roty")
+	left_saber_rotz_control = left_saber.find_child("rotz")
+
+	var right_saber: HBoxContainer = find_child("right_saber_offset")
+	right_saber_posx_control = right_saber.find_child("posx")
+	right_saber_posy_control = right_saber.find_child("posy")
+	right_saber_posz_control = right_saber.find_child("posz")
+	right_saber_rotx_control = right_saber.find_child("rotx")
+	right_saber_roty_control = right_saber.find_child("roty")
+	right_saber_rotz_control = right_saber.find_child("rotz")
+
 	saber_control.clear()
 	for s in Settings.SABER_VISUALS:
 		saber_control.add_item(s[0])
@@ -62,14 +101,23 @@ func set_controls_from_settings() -> void:
 	
 	# set the selections to the loaded values
 	await get_tree().process_frame
+
+	if OS.get_name() == &"Web":
+		# way too heavy for webxr
+		glare_control.button_pressed = false
+		Settings.glare = false
+		glare_control.hide()
+	else:
+		glare_control.button_pressed = Settings.glare
+
 	saber_thickness.value = Settings.thickness
 	cut_blocks.button_pressed = Settings.cube_cuts_falloff
 	left_saber_col.color = Settings.color_left
 	right_saber_col.color = Settings.color_right
 	saber_tail_control.button_pressed = Settings.saber_tail
-	glare_control.button_pressed = Settings.glare
+
 	d_background.button_pressed = Settings.events
-	simple_shaders.button_pressed = Settings.events
+	simple_shaders.button_pressed = Settings.simple_shaders
 	antialias_option.selected = Settings.antialias
 	saber_control.select(Settings.saber_visual)
 	show_debug_control.button_pressed = Settings.show_debug_info
@@ -243,7 +291,7 @@ func _on_spectator_hud_toggled(value: bool) -> void:
 
 
 func _on_recenter_button_up() -> void:
-	var recenter_button : Button = $ScrollContainer/VBox/recenter
+	var recenter_button : Button = find_child("recenter")
 	recenter_button.disabled = true
 	recenter_button.text = "3.."
 	await get_tree().create_timer(1).timeout
