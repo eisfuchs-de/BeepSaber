@@ -124,30 +124,84 @@ text = "Plays"
 clip_text = true
 
 [node name="download" type="Button" parent="."]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 344.0
+offset_left = 16.0
 offset_top = -88.0
-offset_right = 552.0
+offset_right = 224.0
 offset_bottom = -24.0
+grow_vertical = 0
 theme_override_styles/hover = SubResource("5")
 theme_override_styles/pressed = SubResource("6")
 theme_override_styles/normal = SubResource("7")
 text = "Download"
 
 [node name="search" type="Button" parent="."]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 624.0
+offset_left = 307.0
 offset_top = -88.0
-offset_right = 832.0
+offset_right = 515.0
 offset_bottom = -24.0
+grow_vertical = 0
 theme_override_styles/hover = SubResource("5")
 theme_override_styles/pressed = SubResource("6")
 theme_override_styles/normal = SubResource("7")
 text = "Search"
+
+[node name="automapper" type="OptionButton" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 537.0
+offset_top = -88.0
+offset_right = 745.0
+offset_bottom = -24.0
+grow_vertical = 0
+theme_override_styles/hover = SubResource("5")
+theme_override_styles/pressed = SubResource("6")
+theme_override_styles/normal = SubResource("7")
+alignment = 1
+selected = 0
+item_count = 3
+popup/item_0/text = "Human only"
+popup/item_1/text = "Human, AI"
+popup/item_1/id = 1
+popup/item_2/text = "AI only"
+popup/item_2/id = 2
+
+[node name="sort_order" type="OptionButton" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 767.0
+offset_top = -88.0
+offset_right = 975.0
+offset_bottom = -24.0
+grow_vertical = 0
+theme_override_styles/hover = SubResource("5")
+theme_override_styles/pressed = SubResource("6")
+theme_override_styles/normal = SubResource("7")
+alignment = 1
+selected = 1
+item_count = 6
+popup/item_0/text = "Latest"
+popup/item_1/text = "Relevance"
+popup/item_1/id = 1
+popup/item_2/text = "Rating"
+popup/item_2/id = 2
+popup/item_3/text = "Curated"
+popup/item_3/id = 3
+popup/item_4/text = "Random"
+popup/item_4/id = 4
+popup/item_5/text = "Duration"
+popup/item_5/id = 5
 
 [node name="back" type="Button" parent="."]
 layout_mode = 0
@@ -163,13 +217,15 @@ theme_override_styles/normal = SubResource("7")
 text = "Back"
 
 [node name="gotoMapsBy" type="Button" parent="."]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 904.0
+offset_left = 1079.0
 offset_top = -88.0
-offset_right = 1112.0
+offset_right = 1287.0
 offset_bottom = -24.0
+grow_vertical = 0
 theme_override_styles/hover = SubResource("5")
 theme_override_styles/pressed = SubResource("6")
 theme_override_styles/normal = SubResource("7")
@@ -246,6 +302,8 @@ scroll_node_path = NodePath("../ItemList")
 [connection signal="button_up" from="mode" to="." method="_on_mode_button_up"]
 [connection signal="button_up" from="download" to="." method="_on_download_button_up"]
 [connection signal="button_up" from="search" to="." method="_on_search_button_up"]
+[connection signal="item_selected" from="automapper" to="." method="_on_automapper_item_selected"]
+[connection signal="item_selected" from="sort_order" to="." method="_on_sort_order_item_selected"]
 [connection signal="pressed" from="back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="gotoMapsBy" to="." method="_on_gotoMapsBy_pressed"]
 [connection signal="pressed" from="CloseButton" to="." method="_on_CloseButton_pressed"]

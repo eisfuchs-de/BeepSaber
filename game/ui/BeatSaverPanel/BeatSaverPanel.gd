@@ -37,6 +37,9 @@ var search_word := ""
 var item_selected := -1
 var downloading := []#[["name","version_info"]]
 
+var automapper := ""
+var sort_order := "Relevance"
+
 @onready var item_list := $ItemList as ItemList
 @onready var mode_button := $mode as Button
 @onready var label := $Label as Label
@@ -132,21 +135,27 @@ func update_list(req: BeatSaverRequest) -> void:
 	prev_page_available = req.page
 	next_page_available = -1
 	
+	var request_url := ""
 	match req.type:
 		"list":
 			var list := req.data
 			mode_button.text = list.substr(0,1).capitalize() + list.substr(1)
-			httpreq.request("https://beatsaver.com/api/maps/%s/%s" % [list,req.page])
+			request_url = "https://beatsaver.com/api/maps/%s/%s" % [list,req.page]
 		"text_search":
 			var search_text := req.data
 			mode_button.text = search_text
-			httpreq.request("https://beatsaver.com/api/search/text/%s?q=%s&sortOrder=Relevance&automapper=true" % [req.page,search_text.uri_encode()])
+			request_url = "https://beatsaver.com/api/search/text/%s?q=%s&sortOrder=%s%s" % [req.page, search_text.uri_encode(), sort_order, automapper]
 		"uploader":
 			var uploader_id := req.data
 			mode_button.text = "Uploader"
-			httpreq.request("https://beatsaver.com/api/maps/uploader/%s/%s" % [uploader_id,req.page])
+			request_url = "https://beatsaver.com/api/maps/uploader/%s/%s" % [uploader_id,req.page]
 		_:
 			vr.log_warning("Unsupported request type '%s'" % req.type)
+
+	# pulled out here so we can display some debug output
+	if request_url:
+		vr.log_info("Request URL: " + request_url)
+		httpreq.request(request_url)
 
 func _add_to_back_stack(request: BeatSaverRequest) -> void:
 	if request == null: return
@@ -445,3 +454,22 @@ func _on_BeatSaverPanel_visibility_changed() -> void:
 		prev_request = first_req
 		update_list(prev_request)
 		_is_first_show = false
+
+func _on_automapper_item_selected(index: int) -> void:
+	# from the API docs: true = both, false = only ai, null = no ai
+	automapper = ["", "&automapper=true", "&automapper=false"][index]
+	_add_to_back_stack(prev_request)
+	prev_request = BeatSaverRequest.new()
+	prev_request.page = 0
+	prev_request.type = "text_search"
+	prev_request.data = search_word
+	update_list(prev_request)
+
+func _on_sort_order_item_selected(index: int) -> void:
+	sort_order = ["Latest", "Relevance", "Rating", "Curated", "Random", "Duration"][index]
+	_add_to_back_stack(prev_request)
+	prev_request = BeatSaverRequest.new()
+	prev_request.page = 0
+	prev_request.type = "text_search"
+	prev_request.data = search_word
+	update_list(prev_request)
