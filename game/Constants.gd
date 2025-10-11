@@ -21,7 +21,4 @@ func _ready() -> void:
 		APP_PACKAGE_NAME = ProjectSettings.globalize_path("user://").split("/")[3]
 
 		# => /sdcard/Android/data/org.godotengine.open_saber/files/backup
-		APPDATA_BACKUP_PATH = "/sdcard/Android/data/" + APP_PACKAGE_NAME + "/files/backup"
-
-		print(ProjectSettings.globalize_path("user://"))
-		print(APPDATA_BACKUP_PATH)
+		APPDATA_BACKUP_PATH = "/sdcard/Android/data/" + APP_PACKAGE_NAME + "/files/backup/"
