@@ -53,7 +53,7 @@ func load_highscores(map_info: MapInfo, diff_rank: int, highlight_rank: int = -1
 		var new_row = _base_row.duplicate()
 		new_row.get_child(0).text = "%d." % idx
 		new_row.get_child(1).text = record.player_name
-		new_row.get_child(2).text = str(record.score)
+		new_row.get_child(2).text = str(int(record.score))
 		new_row.get_child(3).text = percent_str
 		new_row.get_child(4).text = date_time_str
 	
