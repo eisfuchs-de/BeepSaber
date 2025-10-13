@@ -401,7 +401,7 @@ func _ready() -> void:
 	@warning_ignore("return_value_discarded")
 	keyboard._text_edit.text_changed.connect(_text_input_changed)
 	@warning_ignore("return_value_discarded")
-	keyboard._text_edit.focus_exited.connect(_text_input_enter)
+	keyboard._text_edit.focus_exited.connect(_text_input_focus_exited)
 	
 	if song_uploader_ref and song_uploader_ref.active:
 		$upload_url.text = "Manually Upload Custom Songs: \n%s"%[
@@ -471,6 +471,9 @@ func _on_Search_Button_button_up() -> void:
 	keyboard._text_edit.grab_focus()
 
 func _text_input_enter(_text: String) -> void:
+	keyboard.visible=false
+
+func _text_input_focus_exited() -> void:
 	keyboard.visible=false
 
 func _text_input_cancel() -> void:
