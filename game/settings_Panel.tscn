@@ -267,10 +267,9 @@ text = "Recenter"
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 3
+current_tab = 0
 
 [node name="Visuals" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -292,6 +291,18 @@ layout_mode = 2
 tooltip_text = "High Performance impact*"
 theme = SubResource("3")
 text = "*Cut Blocks: "
+
+[node name="extra_particle_effects" type="CheckButton" parent="MarginContainer/VBoxContainer/TabContainer/Visuals"]
+layout_mode = 2
+tooltip_text = "High Performance impact*"
+theme = SubResource("3")
+text = "*Extra Particle Effects: "
+
+[node name="use_gpu_particles" type="CheckButton" parent="MarginContainer/VBoxContainer/TabContainer/Visuals"]
+layout_mode = 2
+tooltip_text = "Might not work on all devices"
+theme = SubResource("3")
+text = "Hardware Accelerated Particles: "
 
 [node name="glare" type="CheckButton" parent="MarginContainer/VBoxContainer/TabContainer/Visuals"]
 layout_mode = 2
@@ -571,6 +582,7 @@ theme = SubResource("3")
 text = "Spectator HUD:"
 
 [node name="Audio" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 
@@ -673,6 +685,8 @@ text = "Apply"
 [connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Visuals/simple_shaders" to="." method="_on_simple_shaders_toggled"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Visuals/d_background" to="." method="_on_d_background_toggled"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Visuals/cut_blocks" to="." method="_on_cut_blocks_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Visuals/extra_particle_effects" to="." method="_on_extra_particle_effects_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Visuals/use_gpu_particles" to="." method="_on_use_gpu_particles_toggled"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Visuals/glare" to="." method="_on_glare_toggled"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Visuals/saber_tail" to="." method="_on_saber_tail_toggled"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/Visuals/antialias_box/antialias_option" to="." method="_on_antialias_selected"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://dqb3ybvpsfcbw"]
+[gd_scene load_steps=48 format=3 uid="uid://dqb3ybvpsfcbw"]
 
 [ext_resource type="PackedScene" uid="uid://cs8e62lsifik5" path="res://game/floor.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://d04fmtjhjx4oy" path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel.tscn" id="2"]
@@ -36,6 +36,8 @@
 [ext_resource type="Script" path="res://game/scripts/SongUploader/song_uploader.gd" id="33_l0uxg"]
 [ext_resource type="PackedScene" uid="uid://dvj8dorx2l7s0" path="res://game/BeepCube/BeepCube.tscn" id="33_nc705"]
 [ext_resource type="PackedScene" uid="uid://b62c3hkjmky75" path="res://game/Chain/ChainLink.tscn" id="34_tsovg"]
+[ext_resource type="PackedScene" uid="uid://cb8o4iyrwcqje" path="res://game/SliceParticles.tscn" id="37_7gn1x"]
+[ext_resource type="PackedScene" uid="uid://eluxd6lkjt2g" path="res://game/SliceParticlesGPU.tscn" id="38_gtfvn"]
 
 [sub_resource type="Environment" id="1"]
 background_mode = 2
@@ -343,6 +345,11 @@ spot_range = 60.0
 spot_attenuation = 2.0
 spot_angle = 30.0
 spot_angle_attenuation = 0.55
+
+[node name="SliceParticles" parent="." instance=ExtResource("37_7gn1x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10, 0)
+
+[node name="SliceParticlesGPU" parent="." instance=ExtResource("38_gtfvn")]
 
 [connection signal="finished" from="SongPlayer" to="." method="_on_song_ended"]
 [connection signal="area_entered" from="XROrigin3D/XRCamera3D/PlayerHead" to="." method="_on_PlayerHead_area_entered"]

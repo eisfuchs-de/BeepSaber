@@ -3,7 +3,7 @@
 extends RayCast3D
 class_name SwingableRayCast
 
-signal area_collided(area: Area3D)
+signal area_collided(area: Area3D, point: Vector3)
 
 @export var num_collision_raycasts: int = 8
 
@@ -92,7 +92,7 @@ func _physics_process(_delta: float) -> void:
 	var coll := get_collider()
 	if coll is Area3D:
 		core_ray_collision_count += 1
-		area_collided.emit(coll)
+		area_collided.emit(coll, get_collision_point())
 	
 	# ---------------------
 	
@@ -110,7 +110,7 @@ func _physics_process(_delta: float) -> void:
 			coll = ray.get_collider()
 			if coll is Area3D:
 				aux_ray_collision_count += 1
-				area_collided.emit(coll)
+				area_collided.emit(coll, get_collision_point())
 		
 		_prev_ray_positions[i] = ray.global_transform.origin
 		

@@ -9,6 +9,8 @@ var glare_control: CheckButton
 var saber_tail_control: CheckButton
 var saber_thickness: HSlider
 var cut_blocks: CheckButton
+var extra_particle_effects: CheckButton
+var use_gpu_particles: CheckButton
 var d_background: CheckButton
 var simple_shaders: CheckButton
 var antialias_option: OptionButton
@@ -56,6 +58,8 @@ func set_controls_from_settings() -> void:
 	right_saber_col = find_child("right_saber_col")
 
 	cut_blocks = find_child("cut_blocks")
+	extra_particle_effects = find_child("extra_particle_effects")
+	use_gpu_particles = find_child("use_gpu_particles")
 	show_collisions = find_child("show_collisions")
 	glare_control = find_child("glare")
 	d_background = find_child("d_background")
@@ -112,6 +116,9 @@ func set_controls_from_settings() -> void:
 
 	saber_thickness.value = Settings.thickness
 	cut_blocks.button_pressed = Settings.cube_cuts_falloff
+	extra_particle_effects.button_pressed = Settings.extra_particle_effects
+	use_gpu_particles.disabled = !Settings.extra_particle_effects
+	use_gpu_particles.button_pressed = Settings.use_gpu_particles
 	left_saber_col.color = Settings.color_left
 	right_saber_col.color = Settings.color_right
 	saber_tail_control.button_pressed = Settings.saber_tail
@@ -158,6 +165,13 @@ func _on_thickness_value_changed(value: float) -> void:
 
 func _on_cut_blocks_toggled(button_pressed: bool) -> void:
 	Settings.cube_cuts_falloff = button_pressed
+
+func _on_extra_particle_effects_toggled(button_pressed: bool) -> void:
+	Settings.extra_particle_effects = button_pressed
+	use_gpu_particles.disabled = !button_pressed
+
+func _on_use_gpu_particles_toggled(button_pressed: bool) -> void:
+	Settings.use_gpu_particles = button_pressed
 
 func _on_left_saber_color_changed(color: Color) -> void:
 	Settings.color_left = color

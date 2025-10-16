@@ -11,6 +11,8 @@ var _mat: ShaderMaterial
 var piece_left : CutPiece = null
 var piece_right : CutPiece = null
 
+var color: Color
+
 func _ready() -> void:
 	_mat = mi.material_override as ShaderMaterial
 	_mesh = mi.mesh
@@ -66,7 +68,7 @@ func spawn(chain_info: ChainInfo, current_beat: float, head_pos: Vector2, tail_p
 	# can behave weirdly (ex. AnimationPlayer won't always play correctly)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
-	var color := Map.color_left if chain_info.color == 0 else Map.color_right
+	color = Map.color_left if chain_info.color == 0 else Map.color_right
 	speed = Constants.BEAT_DISTANCE * Map.current_info.beats_per_minute * 0.016666666666666667
 	which_saber = chain_info.color
 	
@@ -118,7 +120,7 @@ func hide_cube() -> void:
 	# disable processing on this node and all children to help with performance
 	process_mode = Node.PROCESS_MODE_DISABLED # disable to help with performance
 
-func cut(saber_type: int, _cut_speed: Vector3, cut_plane: Plane, _controller: BeepSaberController) -> void:
+func cut(saber_type: int, cut_speed: Vector3, cut_plane: Plane, _controller: BeepSaberController, point: Vector3) -> void:
 	if saber_type == which_saber:
 		Scoreboard.chain_link_cut(transform.origin)
 	else:
@@ -126,6 +128,9 @@ func cut(saber_type: int, _cut_speed: Vector3, cut_plane: Plane, _controller: Be
 	
 	hide_cube()
 	if Settings.cube_cuts_falloff:
+		var slice_particles := get_tree().current_scene.find_child("SliceParticlesGPU" if Settings.use_gpu_particles else "SliceParticles")
+		slice_particles.fire((saber_type == which_saber), color, point, cut_plane, cut_speed)
+
 		_start_cut_pieces(cut_plane)
 		# release() will be called by Cuttable class when it sees both pieces die
 	else:

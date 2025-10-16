@@ -9,13 +9,11 @@ var beat: float
 var _piece_death_count := 0
 
 # overridden by bombs and cubes
-@warning_ignore("unused_parameter")
-func set_collision_disabled(value: bool) -> void:
+func set_collision_disabled(_value: bool) -> void:
 	return
 
-# overriden by bombs and cubes
-@warning_ignore("unused_parameter")
-func cut(saber_type: int, cut_speed: Vector3, cut_plane: Plane, controller: BeepSaberController) -> void:
+# overriden by bombs, chain links and cubes
+func cut(_saber_type: int, _cut_speed: Vector3, _cut_plane: Plane, _controller: BeepSaberController, _point: Vector3) -> void:
 	return
 
 # this too

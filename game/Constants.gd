@@ -1,5 +1,8 @@
 extends Node
 
+# preallocate this many slice particle emitters for performance
+const SLICE_EMITTERS := 8
+
 const LANE_ZERO_X := -0.9
 const LAYER_ZERO_Y := 0.8
 const BEAT_DISTANCE := 4.0

@@ -117,7 +117,7 @@ func set_saber(saber_path: String) -> void:
 func set_swingcast_enabled(value: bool) -> void:
 	_swing_cast.set_raycasts_enabled(value)
 
-func _handle_area_collided(area: Area3D) -> void:
+func _handle_area_collided(area: Area3D, point: Vector3) -> void:
 	if Scoreboard.paused: return
 	var cut_object := area.get_parent()
 	if not cut_object is Cuttable: return
@@ -134,7 +134,7 @@ func _handle_area_collided(area: Area3D) -> void:
 	var controller_speed: Vector3 = (saber_end - saber_end_past) / last_dt
 	const BEAT_DISTANCE := 4.0
 	var cutplane := Plane(o, saber_end, saber_end_past + Vector3(0, 0, BEAT_DISTANCE * Map.current_info.beats_per_minute * last_dt / 30)) # Account for relative position to track speed
-	note.cut(type, controller_speed, cutplane, controller)
+	note.cut(type, controller_speed, cutplane, controller, point)
 
 func _on_AnimationPlayer_animation_started(_anim_name: StringName) -> void:
 	_swing_cast.adjust_segments = true

@@ -8,10 +8,10 @@ signal cutted(correct_saber: bool)
 @onready var mi := $BeepCubeMesh as MeshInstance3D
 @onready var collision_big := $BeepCube_Big/CollisionBig as CollisionShape3D
 @onready var collision_small := $BeepCube_Small/CollisionSmall as CollisionShape3D
-@onready var slice_particles := $SliceParticles as BeepCubeSliceParticles
 
 var which_saber: int
 var is_dot: bool
+var color: Color
 
 # we store the mesh here as part of the BeepCube for easier access because we will
 # reuse it when we create the cut cube pieces
@@ -31,15 +31,12 @@ func _ready() -> void:
 	piece_left = CutPiece.new(self, _mesh, _mat.duplicate(true) as ShaderMaterial, true)
 	piece_right = CutPiece.new(self, _mesh, _mat.duplicate(true) as ShaderMaterial, true)
 	
-	# slice_particles are within cube's tree, but want then to move in global space
-	slice_particles.top_level = true
-	
 func spawn(note_info: ColorNoteInfo, current_beat: float) -> void:
 	# re-enable our process_mode first otherwise it seems like Godot-internals
 	# can behave weirdly (ex. AnimationPlayer won't always play correctly)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
-	var color := Map.color_left if note_info.color == 0 else Map.color_right
+	color = Map.color_left if note_info.color == 0 else Map.color_right
 	speed = Constants.BEAT_DISTANCE * Map.current_info.beats_per_minute * 0.016666666666666667
 	beat = note_info.beat
 	which_saber = note_info.color
@@ -95,7 +92,6 @@ func spawn(note_info: ColorNoteInfo, current_beat: float) -> void:
 	anim.speed_scale = maxf(min_speed,anim_speed)
 	anim.play(&"Spawn")
 	
-	slice_particles.reset()
 	mi.visible = true
 
 # call this when clearing the track
@@ -129,7 +125,7 @@ func set_collision_disabled(value: bool) -> void:
 	collision_big.disabled = value
 	collision_small.disabled = value
 
-func cut(saber_type: int, cut_speed: Vector3, cut_plane: Plane, controller: BeepSaberController) -> void:
+func cut(saber_type: int, cut_speed: Vector3, cut_plane: Plane, controller: BeepSaberController, point: Vector3) -> void:
 	# compute the angle between the cube orientation and the cut direction
 	var cut_direction_xy := -Vector3(cut_speed.x, cut_speed.y, 0.0).normalized()
 	var base_cut_angle_accuracy := global_transform.basis.y.dot(cut_direction_xy)
@@ -155,6 +151,9 @@ func cut(saber_type: int, cut_speed: Vector3, cut_plane: Plane, controller: Beep
 	
 	hide_cube()
 	if Settings.cube_cuts_falloff:
+		var slice_particles := get_tree().current_scene.find_child("SliceParticlesGPU" if Settings.use_gpu_particles else "SliceParticles")
+		slice_particles.fire((saber_type == which_saber), color, point, cut_plane, cut_speed)
+
 		_start_cut_pieces(cut_plane)
 		# release() will be called by Cuttable class when it sees both pieces die
 	else:
@@ -179,7 +178,3 @@ func _start_cut_pieces(cutplane: Plane) -> void:
 	var split_vector := cutplane.normal * 2.0
 	piece_left.apply_central_impulse(-split_vector)
 	piece_right.apply_central_impulse(split_vector)
-	
-	slice_particles.global_transform.origin = global_transform.origin
-	slice_particles.rotation.z = cut_angle_abs+TAU*0.25
-	slice_particles.fire()

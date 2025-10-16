@@ -52,6 +52,14 @@ var cube_cuts_falloff: bool:
 	set(value):
 		cube_cuts_falloff = value
 		set_and_emit(&"cube_cuts_falloff", value)
+var extra_particle_effects: bool:
+	set(value):
+		extra_particle_effects = value
+		set_and_emit(&"extra_particle_effects", value)
+var use_gpu_particles: bool:
+	set(value):
+		use_gpu_particles = value
+		set_and_emit(&"use_gpu_particles", value)
 var saber_tail: bool:
 	set(value):
 		saber_tail = value
@@ -146,6 +154,8 @@ const platform_default_values = {
 		glare = false,
 		saber_tail = false,
 		cube_cuts_falloff = false,
+		extra_particle_effects = false,
+		use_gpu_particles = false,
 		events = false,
 	},
 }
@@ -153,6 +163,8 @@ const platform_default_values = {
 var default_values = {
 	thickness = 1.0,
 	cube_cuts_falloff = true,
+	extra_particle_effects = true,
+	use_gpu_particles = true,
 	color_left = Color("ff1a1a"),
 	color_right = Color("1a1aff"),
 	saber_tail = true,
@@ -248,6 +260,8 @@ func load_old_config() -> void:
 				@warning_ignore("unsafe_cast")
 				right_saber_offset_rot = right_array[1] as Vector3
 	cube_cuts_falloff = Utils.get_bool(settings_dict, "cube_cuts_falloff", true, {"Web": false})
+	extra_particle_effects = Utils.get_bool(settings_dict, "extra_particle_effects", true, {"Web": false})
+	use_gpu_particles = Utils.get_bool(settings_dict, "use_gpu_particles", true, {"Web": false})
 	saber_tail = Utils.get_bool(settings_dict, "saber_tail", true, {"Web": false})
 	glare = Utils.get_bool(settings_dict, "glare", true, {"Android": false, "Web": false})
 	show_debug_info = Utils.get_bool(settings_dict, "show_debug_info", false)

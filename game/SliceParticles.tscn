@@ -1,0 +1,62 @@
+[gd_scene load_steps=7 format=4 uid="uid://cb8o4iyrwcqje"]
+
+[ext_resource type="Script" path="res://game/SliceParticles.gd" id="1_nq04q"]
+[ext_resource type="Material" uid="uid://dnx2q2d7g1y08" path="res://game/slice_particle_material.tres" id="2_mry1h"]
+[ext_resource type="Curve" uid="uid://fq6yolj7ed0p" path="res://game/slice_particle_scale_amount_curve.tres" id="3_w1jiu"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_5ieqp"]
+_surfaces = [{
+"aabb": AABB(-0.009375, -0.075, -0.009375, 0.01875, 0.15, 0.01875),
+"attribute_data": PackedByteArray("/38AAP//oH//f6B//3///wAAoH//f6B///+gf/9/////f6B/AACgf/9/AAD/f6B//3///wAAoH//f6B///+gf/9/////f6B//3+gfwAAoH//fwAA/38AAP//oH//f6B/"),
+"format": 34896613399,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAwAEAAUABgAHAAgACQAKAAsADAANAA4ADwAQABEAEgATABQAFQAWABcA"),
+"material": ExtResource("2_mry1h"),
+"name": "SliceParticleMaterial",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("/3////9/nKD//165/3+coP9/Xrn//5yg/38AAP9/FqAAAF65/38WoP9/Xrn//xag//9euf9/FqD/fwAA/38WoP9/Xrn//xagAABeuf9/nKD/f////3+coP9/Xrn//5yg/38AAP9/A+D//165/38D4P9/XrkAAAPgAABeuf9/A+D/fwAA/38D4P9/XrkAAAPg/39euQAAGuD//165/38a4P9/////fxrg/3////9/GuAAAF65/38a4P9/XrkAABrgWZtXE1mbVxNZm1cT73N39+9zd/fvc3f3d3cQDHd3EAx3dxAMVpOk5FaTpORWk6Tkcn5JBXJ+SQVyfkkFtXpy/rV6cv61enL+84zLA/OMywPzjMsDyoML88qDC/PKgwvz")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="Curve" id="Curve_l8uuy"]
+min_value = -5.0
+max_value = 2.0
+_data = [Vector2(0, 0.25), 0.0, 3.38295, 0, 0, Vector2(0.208955, -2.06), -26.3813, -26.3813, 0, 0, Vector2(0.272388, -5), 0.792676, 0.792676, 0, 0, Vector2(1, -5), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Gradient" id="Gradient_0th5v"]
+offsets = PackedFloat32Array(0.638158, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[node name="SliceParticles" type="Node3D"]
+script = ExtResource("1_nq04q")
+
+[node name="BaseParticles" type="CPUParticles3D" parent="."]
+layers = 3
+cast_shadow = 0
+gi_mode = 0
+amount = 60
+lifetime = 2.0
+preprocess = 0.5
+explosiveness = 1.0
+randomness = 1.0
+lifetime_randomness = 0.16
+fixed_fps = 30
+visibility_aabb = AABB(-1.01498, -1.44944, -1.5338, 2.02995, 2.89889, 3.06759)
+mesh = SubResource("ArrayMesh_5ieqp")
+particle_flag_align_y = true
+direction = Vector3(0, 0, -1)
+spread = 63.45
+flatness = 0.81
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.2
+initial_velocity_max = 0.4
+linear_accel_min = 0.04
+linear_accel_max = 0.04
+linear_accel_curve = SubResource("Curve_l8uuy")
+scale_amount_min = 0.0
+scale_amount_max = 0.5
+scale_amount_curve = ExtResource("3_w1jiu")
+color_ramp = SubResource("Gradient_0th5v")
