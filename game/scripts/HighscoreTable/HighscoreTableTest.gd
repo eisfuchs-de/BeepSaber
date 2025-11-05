@@ -2,23 +2,33 @@ extends Node2D
 
 # Run HighscoreTableTest scene and inspect console output for error
 
-const TEST_MAP_INFO_0 = {
-	  "_songName": "TestSongName0",
-	  "_songSubName": "TestSubName",
-	  "_songAuthorName": "TestArtist",
-	  "_levelAuthorName": "TestLevelAuthor",
-	}
-
-const TEST_MAP_INFO_1 = {
-	  "_songName": "TestSongName1",
-	  "_songSubName": "TestSubName",
-	  "_songAuthorName": "TestArtist",
-	  "_levelAuthorName": "TestLevelAuthor",
-	}
+var TEST_MAP_INFO_0: MapInfo
+var TEST_MAP_INFO_1: MapInfo
 	
 var _test_hs : HighscoreTable = null
 
 func _ready():
+
+	TEST_MAP_INFO_0 = MapInfo.new(
+		"1.0",
+		"TestSongName0",
+		"TestSubName",
+		"TestArtist",
+		"TestLevelAuthor",
+		120, # BPM
+		0.0,      # preview start time
+		0.0,      # preview duration
+		"NoSongFilename.ogg",
+		"NoCoverImage.jpg",
+		"NoEnv",
+		0.0,
+		{},
+		"NoFilePath",
+		{})
+
+	TEST_MAP_INFO_1 = TEST_MAP_INFO_0.duplicate()
+	TEST_MAP_INFO_1.song_name = "TestSongName1"
+
 	var test_methodnames = []
 	for method in get_method_list():
 		var method_name = method.name
@@ -48,8 +58,8 @@ func test_teardown():
 func testcase_simple_add():
 	var DIFF_RANK = 1
 	
-	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"Player",10000)
-	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"Player",20000)
+	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"Player",10000,1.0)
+	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"Player",20000,1.0)
 	var records = _test_hs.get_records(TEST_MAP_INFO_0,DIFF_RANK)
 	
 	_assert_equal(records.size(),2)
@@ -68,7 +78,8 @@ func testcase_max_records():
 			TEST_MAP_INFO_0,
 			DIFF_RANK,
 			"Player",
-			i * 100)# 0, 100, 200, etc.
+			i * 100, # 0, 100, 200, etc.
+			1.0)
 	
 	var records = _test_hs.get_records(TEST_MAP_INFO_0,DIFF_RANK)
 	_assert_equal(records.size(),10)
@@ -79,9 +90,9 @@ func testcase_max_records():
 func testcase_tied_record():
 	var DIFF_RANK = 1
 	
-	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"i_was_first",1000)
-	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"im_lower",500)
-	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"i_was_second",1000)
+	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"i_was_first",1000,1.0)
+	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"im_lower",500,1.0)
+	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"i_was_second",1000,1.0)
 	
 	var records = _test_hs.get_records(TEST_MAP_INFO_0,DIFF_RANK)
 	_assert_equal(records.size(),3)
@@ -94,8 +105,8 @@ func testcase_tied_record():
 func testcase_get_names():
 	var DIFF_RANK = 1
 	
-	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"Alice",1000)
-	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"Bob",1000)
+	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"Alice",1000,1.0)
+	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"Bob",1000,1.0)
 	
 	var names = _test_hs.get_all_player_names()
 	_assert_equal(names.size(),2)
@@ -105,8 +116,8 @@ func testcase_get_names():
 func testcase_multiple_maps():
 	var DIFF_RANK = 1
 	
-	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"i_played_map0",1000)
-	_test_hs.add_highscore(TEST_MAP_INFO_1,DIFF_RANK,"i_played_map1",2000)
+	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK,"i_played_map0",1000,1.0)
+	_test_hs.add_highscore(TEST_MAP_INFO_1,DIFF_RANK,"i_played_map1",2000,1.0)
 	
 	var records0 = _test_hs.get_records(TEST_MAP_INFO_0,DIFF_RANK)
 	_assert_equal(records0.size(),1)
@@ -122,8 +133,8 @@ func testcase_multiple_ranks():
 	var DIFF_RANK_A = 1
 	var DIFF_RANK_B = 3
 	
-	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK_A,"i_played_rankA",1000)
-	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK_B,"i_played_rankB",2000)
+	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK_A,"i_played_rankA",1000,1.0)
+	_test_hs.add_highscore(TEST_MAP_INFO_0,DIFF_RANK_B,"i_played_rankB",2000,1.0)
 	
 	var recordsA = _test_hs.get_records(TEST_MAP_INFO_0,DIFF_RANK_A)
 	_assert_equal(recordsA.size(),1)

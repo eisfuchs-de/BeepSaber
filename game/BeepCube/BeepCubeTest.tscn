@@ -55,7 +55,7 @@ func _ready() -> void:
 		0.0,
 		{},
 		\"NoFilePath\",
-		[])
+		{})
 	
 	Map.color_left = Color(1.0, 0.0, 0.0)
 	Map.color_right = Color(0.0, 0.0, 1.0)
@@ -95,7 +95,7 @@ func _on_timer_timeout() -> void:
 			var cut_plane := Plane(
 				Vector3.RIGHT,         # normal
 				cube.global_position)  # origin point
-			cube.cut(0, Vector3.DOWN, cut_plane, controller)
+			cube.cut(0, Vector3.DOWN, cut_plane, controller, Vector3.ZERO)
 		TestOperation.Miss:
 			pass # nothing to do just let cube pass behind the \"player\"
 		_:
