@@ -587,9 +587,9 @@ func restore_data_files() -> void:
 		DirAccess.copy_absolute(Constants.APPDATA_BACKUP_PATH + file_name, "user://" + file_name)
 
 func _on_play_position_value_changed(value: float) -> void:
-	var min := int(value / 60.0)
-	var sec := int(value) % 60
-	play_position_timestamp.text = "%02dm %02ds" % [min, sec]
+	var m := int(value / 60.0)
+	var s := int(value) % 60
+	play_position_timestamp.text = "%02dm %02ds" % [m, s]
 
 func _on_speed_factor_value_changed(value: float) -> void:
 	speed_percent.text = "%3.1f%%" % [speed_factor.value * 100.0]
@@ -617,14 +617,14 @@ func _set_pitch_shift(shift: float) -> void:
 	var audio_bus_idx := AudioServer.get_bus_index("Music")
 	vr.log_info("Effect count on Music bus: %d" % AudioServer.get_bus_effect_count(audio_bus_idx))
 	for effect_idx in AudioServer.get_bus_effect_count(audio_bus_idx):
-		var effect = AudioServer.get_bus_effect(audio_bus_idx, effect_idx)
+		var effect := AudioServer.get_bus_effect(audio_bus_idx, effect_idx)
 		if effect is AudioEffectPitchShift:
 			if shift == 1.0:
 				vr.log_info("Disabling pitch effect with factor %f" % [shift])
 				AudioServer.set_bus_effect_enabled(audio_bus_idx, effect_idx, false)
 			else:
 				vr.log_info("Enabling pitch effect for factor %f" % [shift])
-				effect.pitch_scale = 1.0 / shift
+				(effect as AudioEffectPitchShift).pitch_scale = 1.0 / shift
 				AudioServer.set_bus_effect_enabled(audio_bus_idx, effect_idx, true)
 			return
 
