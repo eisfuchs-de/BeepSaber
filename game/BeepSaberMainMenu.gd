@@ -635,3 +635,18 @@ func _set_pitch_shift(shift: float) -> void:
 		AudioServer.add_bus_effect(audio_bus_idx, pitch_effect)
 	else:
 		vr.log_info("Not creating new pitch effect for factor %f" % [shift])
+
+func _quantize(value: float, q: float) -> float:
+	return floor(value / q) * q
+
+func _on_position_minus_button_pressed() -> void:
+	play_position.value = _quantize(maxf(play_position.min_value, play_position.value - 15.0), 15.0)
+
+func _on_position_plus_button_pressed() -> void:
+	play_position.value = _quantize(minf(play_position.value + 15.0, play_position.max_value), 15.0)
+
+func _on_speed_minus_button_pressed() -> void:
+	speed_factor.value = _quantize(maxf(speed_factor.min_value, speed_factor.value - 0.1), 0.1)
+
+func _on_speed_plus_button_pressed() -> void:
+	speed_factor.value = _quantize(minf(speed_factor.value + 0.1, speed_factor.max_value), 0.1)

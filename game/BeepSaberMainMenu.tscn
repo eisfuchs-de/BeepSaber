@@ -384,18 +384,34 @@ theme_override_font_sizes/font_size = 21
 text = "Position:"
 vertical_alignment = 2
 
-[node name="Slider_Container" type="VBoxContainer" parent="Practice_Panel/MarginContainer/VBoxContainer/Position_Container"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Practice_Panel/MarginContainer/VBoxContainer/Position_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Position_Timestamp" type="Label" parent="Practice_Panel/MarginContainer/VBoxContainer/Position_Container/Slider_Container"]
+[node name="Position_Minus_Button" type="Button" parent="Practice_Panel/MarginContainer/VBoxContainer/Position_Container/HBoxContainer"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+tooltip_text = "Steps back to the previous multiple of 15 seconds."
+text = "-"
+
+[node name="Slider_Container" type="VBoxContainer" parent="Practice_Panel/MarginContainer/VBoxContainer/Position_Container/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Position_Timestamp" type="Label" parent="Practice_Panel/MarginContainer/VBoxContainer/Position_Container/HBoxContainer/Slider_Container"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 21
 text = "00m 00s"
 horizontal_alignment = 1
 
-[node name="Play_Position" type="HSlider" parent="Practice_Panel/MarginContainer/VBoxContainer/Position_Container/Slider_Container"]
+[node name="Play_Position" type="HSlider" parent="Practice_Panel/MarginContainer/VBoxContainer/Position_Container/HBoxContainer/Slider_Container"]
 layout_mode = 2
+
+[node name="Position_Plus_Button" type="Button" parent="Practice_Panel/MarginContainer/VBoxContainer/Position_Container/HBoxContainer"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+tooltip_text = "Steps forward to the next multiple of 15 seconds."
+text = "+"
 
 [node name="Speed_Container" type="HBoxContainer" parent="Practice_Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -409,23 +425,39 @@ theme_override_font_sizes/font_size = 21
 text = "Speed:"
 vertical_alignment = 2
 
-[node name="Slider_Container" type="VBoxContainer" parent="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Speed_Percent" type="Label" parent="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/Slider_Container"]
+[node name="Speed_Minus_Button" type="Button" parent="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/HBoxContainer"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+tooltip_text = "Steps back to the previous 10%."
+text = "-"
+
+[node name="Slider_Container" type="VBoxContainer" parent="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Speed_Percent" type="Label" parent="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/HBoxContainer/Slider_Container"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 21
 text = "100.0%"
 horizontal_alignment = 1
 
-[node name="Speed_Factor" type="HSlider" parent="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/Slider_Container"]
+[node name="Speed_Factor" type="HSlider" parent="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/HBoxContainer/Slider_Container"]
 layout_mode = 2
 min_value = 0.1
 max_value = 2.1
 step = 0.005
 page = 0.1
 value = 1.0
+
+[node name="Speed_Plus_Button" type="Button" parent="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/HBoxContainer"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+tooltip_text = "Steps forward to the next 10%."
+text = "+"
 
 [node name="HSeparator" type="HSeparator" parent="Practice_Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -459,7 +491,11 @@ text = "Cancel"
 [connection signal="item_selected" from="DifficultyMenu" to="." method="_select_difficulty"]
 [connection signal="pressed" from="LoadPlaylists_Button" to="." method="_on_LoadPlaylists_Button_pressed"]
 [connection signal="timeout" from="song_prev/stop_prev" to="." method="_on_stop_prev_timeout"]
-[connection signal="value_changed" from="Practice_Panel/MarginContainer/VBoxContainer/Position_Container/Slider_Container/Play_Position" to="." method="_on_play_position_value_changed"]
-[connection signal="value_changed" from="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/Slider_Container/Speed_Factor" to="." method="_on_speed_factor_value_changed"]
+[connection signal="pressed" from="Practice_Panel/MarginContainer/VBoxContainer/Position_Container/HBoxContainer/Position_Minus_Button" to="." method="_on_position_minus_button_pressed"]
+[connection signal="value_changed" from="Practice_Panel/MarginContainer/VBoxContainer/Position_Container/HBoxContainer/Slider_Container/Play_Position" to="." method="_on_play_position_value_changed"]
+[connection signal="pressed" from="Practice_Panel/MarginContainer/VBoxContainer/Position_Container/HBoxContainer/Position_Plus_Button" to="." method="_on_position_plus_button_pressed"]
+[connection signal="pressed" from="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/HBoxContainer/Speed_Minus_Button" to="." method="_on_speed_minus_button_pressed"]
+[connection signal="value_changed" from="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/HBoxContainer/Slider_Container/Speed_Factor" to="." method="_on_speed_factor_value_changed"]
+[connection signal="pressed" from="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/HBoxContainer/Speed_Plus_Button" to="." method="_on_speed_plus_button_pressed"]
 [connection signal="pressed" from="Practice_Panel/MarginContainer/VBoxContainer/Buttons_Container/Practice_Button" to="." method="_on_do_practice_button_pressed"]
 [connection signal="pressed" from="Practice_Panel/MarginContainer/VBoxContainer/Buttons_Container/Cancel_Button" to="." method="_on_cancel_button_pressed"]
