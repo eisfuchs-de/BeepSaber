@@ -382,7 +382,7 @@ layout_mode = 2
 size_flags_vertical = 1
 theme_override_font_sizes/font_size = 21
 text = "Position:"
-vertical_alignment = 2
+vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Practice_Panel/MarginContainer/VBoxContainer/Position_Container"]
 layout_mode = 2
@@ -423,7 +423,7 @@ layout_mode = 2
 size_flags_vertical = 1
 theme_override_font_sizes/font_size = 21
 text = "Speed:"
-vertical_alignment = 2
+vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container"]
 layout_mode = 2
