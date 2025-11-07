@@ -31,6 +31,14 @@ var _cover_texture_create_sw := StopwatchFactory.create("cover_texture_create",1
 @onready var song_preview := $song_prev as AudioStreamPlayer
 var song_preview_transition_time := 1.0
 
+var practice_button: Button
+var practice_panel: Panel
+var practice_song_label: Label
+var play_position: HSlider
+var play_position_timestamp: Label
+var speed_factor: HSlider
+var speed_percent: Label
+
 var currently_selected_map: MapInfo
 
 enum PlaylistOptions {
@@ -205,6 +213,9 @@ func _load_cover(cover_path: String, filename: String) -> ImageTexture:
 
 func play_preview(buffer: PackedByteArray, start_time: float = 0.0, duration: float = -1.0, buffer_data_type_hint: String = 'ogg') -> void:
 	var stream: AudioStream
+
+	play_position.max_value = 0.0
+
 	# take song preview data from buffer as-is. trust passed type hint
 	if buffer_data_type_hint == 'ogg':
 		stream = AudioStreamOggVorbis.load_from_buffer(buffer)
@@ -213,6 +224,8 @@ func play_preview(buffer: PackedByteArray, start_time: float = 0.0, duration: fl
 		(stream as AudioStreamMP3).data = buffer
 	
 	if not stream: return
+
+	play_position.max_value = stream.get_length()
 	
 	if duration < 0.0:
 		# assume preview duration based on parsed audio length
@@ -278,6 +291,8 @@ func _select_song(id: int, select_set := "", select_name := "") -> void:
 	
 	diff_menu.clear()
 	$Play_Button.disabled = true
+	practice_button.disabled = true
+	practice_song_label.text = map.song_name
 
 	# empty root item
 	var root := diff_menu.create_item()
@@ -311,6 +326,7 @@ func _select_song(id: int, select_set := "", select_name := "") -> void:
 
 	if beatmap_id:
 		$Play_Button.disabled = false
+		practice_button.disabled = false
 
 func _on_stop_prev_timeout() -> void:
 	var song_prev_Tween := song_preview.create_tween().set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
@@ -379,6 +395,17 @@ func _delete_map(map: MapInfo) -> void:
 func _ready() -> void:
 	UI_AudioEngine.attach_children(self)
 	vr.log_info("BeepSaber search path is " + Constants.APPDATA_PATH)
+
+	practice_button = find_child("Practice_Button")
+	practice_panel = find_child("Practice_Panel")
+	practice_song_label = find_child("Practice_Song_Label")
+	play_position = find_child("Play_Position")
+	play_position_timestamp = find_child("Position_Timestamp")
+	speed_factor = find_child("Speed_Factor")
+	speed_percent = find_child("Speed_Percent")
+	practice_panel.visible = false
+
+	_set_pitch_shift(1.0)
 	
 	beepsaber_game.current_gamestate.connect(gamestate_changed)
 	
@@ -525,6 +552,8 @@ func gamestate_changed(name: String) -> void:
 	if name != "mapselection":
 		return
 
+	_set_pitch_shift(1.0)
+
 	if songs_menu.is_anything_selected():
 		# refresh playlist to show new stars in the current song
 		_on_PlaylistSelector_item_selected(playlist_selector.get_selected_id())
@@ -556,3 +585,53 @@ func restore_data_files() -> void:
 	]:
 		print("restoring ", file_name)
 		DirAccess.copy_absolute(Constants.APPDATA_BACKUP_PATH + file_name, "user://" + file_name)
+
+func _on_play_position_value_changed(value: float) -> void:
+	var min := int(value / 60.0)
+	var sec := int(value) % 60
+	play_position_timestamp.text = "%02dm %02ds" % [min, sec]
+
+func _on_speed_factor_value_changed(value: float) -> void:
+	speed_percent.text = "%3.1f%%" % [speed_factor.value * 100.0]
+	pass # Replace with function body.
+
+func _on_practice_button_pressed() -> void:
+	if not currently_selected_map:
+		return
+	practice_panel.visible = true
+
+func _on_do_practice_button_pressed() -> void:
+	beepsaber_game.restart_position = play_position.value
+	_set_pitch_shift(speed_factor.value)
+	_on_Play_Button_pressed()
+
+func _on_cancel_button_pressed() -> void:
+	practice_panel.visible = false
+	beepsaber_game.restart_position = 0.0
+	_set_pitch_shift(1.0)
+
+func _set_pitch_shift(shift: float) -> void:
+	Map.speed_factor = shift
+	beepsaber_game.speed_factor = shift
+
+	var audio_bus_idx := AudioServer.get_bus_index("Music")
+	vr.log_info("Effect count on Music bus: %d" % AudioServer.get_bus_effect_count(audio_bus_idx))
+	for effect_idx in AudioServer.get_bus_effect_count(audio_bus_idx):
+		var effect = AudioServer.get_bus_effect(audio_bus_idx, effect_idx)
+		if effect is AudioEffectPitchShift:
+			if shift == 1.0:
+				vr.log_info("Disabling pitch effect with factor %f" % [shift])
+				AudioServer.set_bus_effect_enabled(audio_bus_idx, effect_idx, false)
+			else:
+				vr.log_info("Enabling pitch effect for factor %f" % [shift])
+				effect.pitch_scale = 1.0 / shift
+				AudioServer.set_bus_effect_enabled(audio_bus_idx, effect_idx, true)
+			return
+
+	if shift != 1.0:
+		vr.log_info("Creating new pitch effect for factor %f" % [shift])
+		var pitch_effect := AudioEffectPitchShift.new()
+		pitch_effect.pitch_scale = 1.0 / shift
+		AudioServer.add_bus_effect(audio_bus_idx, pitch_effect)
+	else:
+		vr.log_info("Not creating new pitch effect for factor %f" % [shift])

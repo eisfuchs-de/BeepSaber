@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://glii0poslcve"]
+[gd_scene load_steps=21 format=3 uid="uid://glii0poslcve"]
 
 [ext_resource type="Theme" uid="uid://dvcjel72een6o" path="res://OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard.theme" id="1"]
 [ext_resource type="FontFile" uid="uid://cdsnr8tscm8y6" path="res://OQ_Toolkit/OQ_UI2D/theme/Roboto-Medium.ttf" id="2"]
@@ -8,6 +8,7 @@
 [ext_resource type="FontFile" uid="uid://01k27lk2a4bw" path="res://OQ_Toolkit/OQ_UI2D/theme/RobotoMono-Medium.ttf" id="5"]
 [ext_resource type="PackedScene" uid="uid://dtipmx5ep1dkk" path="res://game/vr_slider.tscn" id="6"]
 [ext_resource type="FontVariation" uid="uid://ckoe517v8p3qp" path="res://OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard_font.tres" id="7"]
+[ext_resource type="Theme" uid="uid://cbutfawaljce6" path="res://game/BlackWhiteThem.tres" id="9_j2igg"]
 
 [sub_resource type="StyleBoxFlat" id="1"]
 bg_color = Color(0, 0, 0, 1)
@@ -103,14 +104,25 @@ script = ExtResource("3")
 
 [node name="Play_Button" type="Button" parent="."]
 layout_mode = 0
-offset_left = 448.0
+offset_left = 610.0
 offset_top = 576.0
-offset_right = 848.0
+offset_right = 840.0
 offset_bottom = 624.0
 theme_override_styles/hover = SubResource("2")
 theme_override_styles/pressed = SubResource("3")
 theme_override_styles/normal = SubResource("4")
 text = "Play"
+
+[node name="Practice_Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 438.76
+offset_top = 576.0
+offset_right = 602.555
+offset_bottom = 624.0
+theme_override_styles/hover = SubResource("2")
+theme_override_styles/pressed = SubResource("3")
+theme_override_styles/normal = SubResource("4")
+text = "Practice"
 
 [node name="Delete_Button" type="Button" parent="."]
 layout_mode = 0
@@ -148,6 +160,7 @@ theme_override_styles/normal = SubResource("4")
 text = "Settings"
 
 [node name="Backup_Button" type="Button" parent="."]
+layout_mode = 0
 offset_left = 1265.0
 offset_top = 408.0
 offset_right = 1390.0
@@ -159,6 +172,7 @@ theme_override_styles/normal = SubResource("4")
 text = "Backup"
 
 [node name="Restore_Button" type="Button" parent="."]
+layout_mode = 0
 offset_left = 1265.0
 offset_top = 463.0
 offset_right = 1390.0
@@ -309,7 +323,122 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "0.4.1"
 
+[node name="Practice_Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 291.0
+offset_top = 329.0
+offset_right = 848.0
+offset_bottom = 639.0
+theme = ExtResource("9_j2igg")
+
+[node name="MarginContainer" type="MarginContainer" parent="Practice_Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Practice_Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="Caption" type="Label" parent="Practice_Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "Practicing song:"
+horizontal_alignment = 1
+
+[node name="Practice_Song_Label" type="Label" parent="Practice_Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 21
+text = "%s"
+clip_text = true
+
+[node name="HSeparator2" type="HSeparator" parent="Practice_Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Position_Container" type="HBoxContainer" parent="Practice_Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Position_Label" type="Label" parent="Practice_Panel/MarginContainer/VBoxContainer/Position_Container"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 21
+text = "Position:"
+vertical_alignment = 2
+
+[node name="Slider_Container" type="VBoxContainer" parent="Practice_Panel/MarginContainer/VBoxContainer/Position_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Position_Timestamp" type="Label" parent="Practice_Panel/MarginContainer/VBoxContainer/Position_Container/Slider_Container"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "00m 00s"
+horizontal_alignment = 1
+
+[node name="Play_Position" type="HSlider" parent="Practice_Panel/MarginContainer/VBoxContainer/Position_Container/Slider_Container"]
+layout_mode = 2
+
+[node name="Speed_Container" type="HBoxContainer" parent="Practice_Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Speed_Label" type="Label" parent="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 21
+text = "Speed:"
+vertical_alignment = 2
+
+[node name="Slider_Container" type="VBoxContainer" parent="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Speed_Percent" type="Label" parent="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/Slider_Container"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "100.0%"
+horizontal_alignment = 1
+
+[node name="Speed_Factor" type="HSlider" parent="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/Slider_Container"]
+layout_mode = 2
+min_value = 0.1
+max_value = 2.1
+step = 0.005
+page = 0.1
+value = 1.0
+
+[node name="HSeparator" type="HSeparator" parent="Practice_Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Buttons_Container" type="HBoxContainer" parent="Practice_Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Practice_Button" type="Button" parent="Practice_Panel/MarginContainer/VBoxContainer/Buttons_Container"]
+custom_minimum_size = Vector2(100, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Practice"
+
+[node name="Cancel_Button" type="Button" parent="Practice_Panel/MarginContainer/VBoxContainer/Buttons_Container"]
+custom_minimum_size = Vector2(100, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancel"
+
 [connection signal="pressed" from="Play_Button" to="." method="_on_Play_Button_pressed"]
+[connection signal="pressed" from="Practice_Button" to="." method="_on_practice_button_pressed"]
 [connection signal="button_up" from="Delete_Button" to="." method="_on_Delete_Button_button_up"]
 [connection signal="pressed" from="Exit_Button" to="." method="_on_Exit_Button_pressed"]
 [connection signal="pressed" from="Settings_Button" to="." method="_on_Settings_Button_pressed"]
@@ -321,3 +450,7 @@ text = "0.4.1"
 [connection signal="item_selected" from="DifficultyMenu" to="." method="_select_difficulty"]
 [connection signal="pressed" from="LoadPlaylists_Button" to="." method="_on_LoadPlaylists_Button_pressed"]
 [connection signal="timeout" from="song_prev/stop_prev" to="." method="_on_stop_prev_timeout"]
+[connection signal="value_changed" from="Practice_Panel/MarginContainer/VBoxContainer/Position_Container/Slider_Container/Play_Position" to="." method="_on_play_position_value_changed"]
+[connection signal="value_changed" from="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/Slider_Container/Speed_Factor" to="." method="_on_speed_factor_value_changed"]
+[connection signal="pressed" from="Practice_Panel/MarginContainer/VBoxContainer/Buttons_Container/Practice_Button" to="." method="_on_do_practice_button_pressed"]
+[connection signal="pressed" from="Practice_Panel/MarginContainer/VBoxContainer/Buttons_Container/Cancel_Button" to="." method="_on_cancel_button_pressed"]

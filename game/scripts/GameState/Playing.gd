@@ -33,7 +33,7 @@ func _physics_process(game: BeepSaber_Game) -> void:
 		# 0.5 seconds is a pretty concervative number to use for the audio
 		# resync check. Having this duration be this long might only be an
 		# issue for maps that spawn notes extremely early into the song.
-		if game.song_player.get_playback_position() < 0.5:
+		if game.song_player.get_playback_position() < (game.restart_position + 0.5):
 			game._audio_synced_after_restart = true
 
 var bomb_template := load("res://game/Bomb/Bomb.tscn") as PackedScene

@@ -87,6 +87,9 @@ var origin_offset : float
 #prevents the song for starting from the start when pausing and unpausing
 var pause_position := 0.0
 
+var restart_position := 0.0
+var speed_factor := 1.0
+
 # load custom origin offset from filesystem
 func load_offset(song_key : String) -> float:
 	var file := FileAccess.open(OFFSETS_FILEPATH, FileAccess.READ)
@@ -154,11 +157,13 @@ func start_map(info: MapInfo, map_difficulty: DifficultyInfo) -> void:
 	else:
 		event_driver.set_all_off()
 	
+	song_player.pitch_scale = speed_factor
+
 	vr.log_info("loading: " + info.filepath + info.song_filename)
 	song_player.stream = AudioStreamOggVorbis.load_from_file(info.filepath + info.song_filename)
 	
 	_audio_synced_after_restart = false
-	song_player.play(0.0)
+	song_player.play(restart_position)
 	song_player.volume_db = 0.0
 	_in_wall = false
 	Scoreboard.restart()
@@ -168,7 +173,7 @@ func start_map(info: MapInfo, map_difficulty: DifficultyInfo) -> void:
 
 	progress_bar.set_mode(ProgressBarIndicator.DisplayMode.MinutesSeconds)
 	progress_bar.set_max_value(song_player.stream.get_length())
-	progress_bar.set_value(0.0)
+	progress_bar.set_value(restart_position)
 	
 	_clear_track()
 	_transition_game_state(gamestate_playing)
@@ -427,6 +432,12 @@ func _on_PlayerHead_area_exited(area: Area3D) -> void:
 # the high score
 func _on_song_ended() -> void:
 	song_player.stop()
+
+	# do not allow high scores or increment play count in practice mode
+	if restart_position != 0.0 or speed_factor != 1.0:
+		_transition_game_state(gamestate_mapselection)
+		return
+
 	PlayCount.increment_play_count(Map.current_info, Map.current_difficulty_set, Map.current_difficulty.difficulty_rank)
 	
 	var new_record := false

@@ -30,6 +30,8 @@ static var env_color_white_boost: Color
 
 static var obstacle_color: Color
 
+static var speed_factor := 1.0
+
 # some simple multithreading, since larger maps can take a very long time to
 # load.  one particulary notable outlier is the beatmap of shrek, which took
 # around 48 milliseconds to load before even on a 7800x3d, and now takes around

@@ -28,7 +28,7 @@ func on_miss() -> void:
 	queue_free()
 
 func spawn(info: BombInfo, current_beat: float) -> void:
-	speed = Constants.BEAT_DISTANCE * Map.current_info.beats_per_minute / 60.0
+	speed = Constants.BEAT_DISTANCE * Map.current_info.beats_per_minute / 60.0 * Map.speed_factor
 	beat = info.beat
 	
 	var distance: float = info.beat - current_beat

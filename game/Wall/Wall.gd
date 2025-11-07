@@ -35,5 +35,5 @@ func spawn(wall_info: ObstacleInfo, current_beat: float) -> void:
 	transform.origin.y = (0.5 * wall_info.height + wall_info.line_layer) * Constants.LANE_DISTANCE
 	transform.origin.z = (current_beat - wall_info.beat) * Constants.BEAT_DISTANCE - depth
 	
-	speed = Constants.BEAT_DISTANCE * Map.current_info.beats_per_minute / 60.0
+	speed = Constants.BEAT_DISTANCE * Map.current_info.beats_per_minute / 60.0 * Map.speed_factor
 	($AnimationPlayer as AnimationPlayer).play(&"Spawn")

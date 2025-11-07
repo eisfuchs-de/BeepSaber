@@ -69,7 +69,7 @@ func spawn(chain_info: ChainInfo, current_beat: float, head_pos: Vector2, tail_p
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
 	color = Map.color_left if chain_info.color == 0 else Map.color_right
-	speed = Constants.BEAT_DISTANCE * Map.current_info.beats_per_minute * 0.016666666666666667
+	speed = Constants.BEAT_DISTANCE * Map.current_info.beats_per_minute * 0.016666666666666667 * Map.speed_factor
 	which_saber = chain_info.color
 	
 	var lerp_factor := float(link_index) / float(chain_info.slice_count - 1) * chain_info.squish_factor
