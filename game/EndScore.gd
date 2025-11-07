@@ -86,22 +86,22 @@ func set_buttons_disabled(disabled: bool) -> void:
 	($MainMenu/Collision as CollisionShape3D).disabled = disabled
 	($Stars/Collision as CollisionShape3D).disabled = disabled
 
-func _on_Repeat_button_up(pos: Vector3) -> void:
+func _on_Repeat_button_up(_pos: Vector3) -> void:
 	repeat.emit()
 
-func _on_MainMenu_button_up(pos: Vector3) -> void:
+func _on_MainMenu_button_up(_pos: Vector3) -> void:
 	set_buttons_disabled(true)
 	mainmenu.emit()
 
 # TODO: (almost) duplicates a function in BeepSaberMainMenu.gd
 func stars(value: float) -> String:
 	value = clamp(value, 0.0, 5.0)
-	var stars := ("★★★★★".substr(5 - int(value), 5) + "✮".left(fposmod(value, 1) + 0.5) + "☆☆☆☆☆").left(5)
-	return stars
+	var s := ("★★★★★".substr(5 - int(value), 5) + "✮".left(int(fposmod(value, 1) + 0.5)) + "☆☆☆☆☆").left(5)
+	return s
 
 func _on_Stars_button_repeated(pos: Vector3) -> void:
-	voted = int(clamp((pos.x + 0.6) * 5.5, 0.0, 5.0))
+	voted = int(clampf((pos.x + 0.6) * 5.5, 0.0, 5.0))
 	stars_display.text = stars(voted)
 
-func _on_Stars_button_released(pos: Vector3) -> void:
+func _on_Stars_button_released(_pos: Vector3) -> void:
 	vote.emit(voted)

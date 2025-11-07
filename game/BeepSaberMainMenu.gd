@@ -122,7 +122,7 @@ func _load_playlists() -> void:
 		var avg_stars : float = total_play_count[&"avg_stars"]
 		songs_with_modify_times.append(MapInfoWithSort.new(modified_time, song))
 		songs_with_play_count.append(MapInfoWithSort.new(play_count, song))
-		songs_with_star_rating.append(MapInfoWithSort.new(avg_stars, song))
+		songs_with_star_rating.append(MapInfoWithSort.new(int(avg_stars * 10), song))
 	
 	songs_with_modify_times.sort_custom(compare)
 	songs_with_play_count.sort_custom(compare)
@@ -167,7 +167,7 @@ func _discover_all_songs(seek_path: String) -> void:
 			file_name = dir.get_next()
 
 	PlayCount.load_table(keys_to_hashes)
-	emit_signal("song_list_changed")
+	song_list_changed.emit()
 
 func _set_cur_playlist(songs: Array[MapInfo]) -> void:
 	_currently_selected_songlist_ref = songs
@@ -250,8 +250,8 @@ func play_preview(buffer: PackedByteArray, start_time: float = 0.0, duration: fl
 func stars(value: float) -> String:
 	if value < 0.0:
 		return "-"
-	var stars := ("★★★★★".substr(5 - int(value), 5) + "✮".left(fposmod(value, 1) + 0.5) + "☆☆☆☆☆").left(5)
-	return stars
+	var s := ("★★★★★".substr(5 - int(value), 5) + "✮".left(int(fposmod(value, 1) + 0.5)) + "☆☆☆☆☆").left(5)
+	return s
 
 func _select_song(id: int, select_set := "", select_name := "") -> void:
 	songs_menu.ensure_current_is_visible()
@@ -298,14 +298,14 @@ func _select_song(id: int, select_set := "", select_name := "") -> void:
 	var root := diff_menu.create_item()
 
 	var beatmap_id := 0
-	for difficulty_set_name in map.difficulty_beatmaps:
+	for difficulty_set_name: String in map.difficulty_beatmaps:
 		var difficulty_set_branch := diff_menu.create_item(root)
 		difficulty_set_branch.set_text(0, difficulty_set_name)
 
 		difficulty_set_branch.set_selectable(0, false)
 		difficulty_set_branch.set_selectable(1, false)
 
-		for difficultiy_name in map.difficulty_beatmaps[difficulty_set_name]:
+		for difficultiy_name: String in map.difficulty_beatmaps[difficulty_set_name]:
 			var diff : DifficultyInfo = map.difficulty_beatmaps[difficulty_set_name][difficultiy_name]
 			var difficulty_item := diff_menu.create_item(difficulty_set_branch)
 			difficulty_item.set_text(0, diff.difficulty)
@@ -407,6 +407,7 @@ func _ready() -> void:
 
 	_set_pitch_shift(1.0)
 	
+	@warning_ignore("return_value_discarded")
 	beepsaber_game.current_gamestate.connect(gamestate_changed)
 	
 	playlist_selector.clear()
@@ -548,8 +549,8 @@ func _on_PlaylistSelector_item_selected(id: int) -> void:
 	Settings.selected_playlist = id
 	Settings.save()
 
-func gamestate_changed(name: String) -> void:
-	if name != "mapselection":
+func gamestate_changed(state_name: String) -> void:
+	if state_name != "mapselection":
 		return
 
 	_set_pitch_shift(1.0)
@@ -560,30 +561,33 @@ func gamestate_changed(name: String) -> void:
 
 func backup_data_files() -> void:
 	if DirAccess.make_dir_recursive_absolute(Constants.APPDATA_BACKUP_PATH) != OK:
-		print("make backup dir ", Constants.APPDATA_BACKUP_PATH, " failed")
+		vr.log_error("Make backup dir " + Constants.APPDATA_BACKUP_PATH + " failed")
 		return
 
-	for file_name in [
+	for file_name: String in [
 		"highscores.json",
 		"custom_offsets.json",
 		"play_count.json",
 		"config.ini",
 	]:
-		print("backing up ", file_name)
+		vr.log_info("Backing up " + file_name)
+		@warning_ignore("return_value_discarded")
 		DirAccess.copy_absolute("user://" + file_name, Constants.APPDATA_BACKUP_PATH + file_name)
 
 func restore_data_files() -> void:
 	if not DirAccess.dir_exists_absolute(Constants.APPDATA_BACKUP_PATH):
-		print("backup dir ", Constants.APPDATA_BACKUP_PATH, " does not exist")
+		vr.log_info("Backup dir " + Constants.APPDATA_BACKUP_PATH + " does not exist")
 		return
 
-	for file_name in [
+	for file_name: String in [
 		"highscores.json",
 		"custom_offsets.json",
 		"play_count.json",
 		"config.ini",
 	]:
-		print("restoring ", file_name)
+		vr.log_info("Restoring " + file_name)
+
+		@warning_ignore("return_value_discarded")
 		DirAccess.copy_absolute(Constants.APPDATA_BACKUP_PATH + file_name, "user://" + file_name)
 
 func _on_play_position_value_changed(value: float) -> void:
