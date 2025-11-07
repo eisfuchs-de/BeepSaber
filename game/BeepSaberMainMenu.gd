@@ -605,7 +605,7 @@ func _on_do_practice_button_pressed() -> void:
 	_set_pitch_shift(speed_factor.value)
 	_on_Play_Button_pressed()
 
-func _on_cancel_button_pressed() -> void:
+func _on_close_button_pressed() -> void:
 	practice_panel.visible = false
 	beepsaber_game.restart_position = 0.0
 	_set_pitch_shift(1.0)

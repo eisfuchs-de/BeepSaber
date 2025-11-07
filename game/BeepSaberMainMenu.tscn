@@ -472,11 +472,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Practice"
 
-[node name="Cancel_Button" type="Button" parent="Practice_Panel/MarginContainer/VBoxContainer/Buttons_Container"]
+[node name="Close_Button" type="Button" parent="Practice_Panel/MarginContainer/VBoxContainer/Buttons_Container"]
 custom_minimum_size = Vector2(100, 48)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Cancel"
+text = "Close"
 
 [connection signal="pressed" from="Play_Button" to="." method="_on_Play_Button_pressed"]
 [connection signal="pressed" from="Practice_Button" to="." method="_on_practice_button_pressed"]
@@ -498,4 +498,4 @@ text = "Cancel"
 [connection signal="value_changed" from="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/HBoxContainer/Slider_Container/Speed_Factor" to="." method="_on_speed_factor_value_changed"]
 [connection signal="pressed" from="Practice_Panel/MarginContainer/VBoxContainer/Speed_Container/HBoxContainer/Speed_Plus_Button" to="." method="_on_speed_plus_button_pressed"]
 [connection signal="pressed" from="Practice_Panel/MarginContainer/VBoxContainer/Buttons_Container/Practice_Button" to="." method="_on_do_practice_button_pressed"]
-[connection signal="pressed" from="Practice_Panel/MarginContainer/VBoxContainer/Buttons_Container/Cancel_Button" to="." method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="Practice_Panel/MarginContainer/VBoxContainer/Buttons_Container/Close_Button" to="." method="_on_close_button_pressed"]
