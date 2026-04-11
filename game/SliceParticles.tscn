@@ -37,6 +37,7 @@ script = ExtResource("1_nq04q")
 layers = 3
 cast_shadow = 0
 gi_mode = 0
+emitting = false
 amount = 60
 lifetime = 2.0
 preprocess = 0.5

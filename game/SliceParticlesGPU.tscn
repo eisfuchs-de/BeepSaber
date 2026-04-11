@@ -69,6 +69,7 @@ script = ExtResource("1_8bkba")
 
 [node name="BaseParticlesGPU" type="GPUParticles3D" parent="."]
 layers = 3
+emitting = false
 amount = 120
 lifetime = 2.0
 preprocess = 0.2

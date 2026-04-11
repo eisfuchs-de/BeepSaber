@@ -23,8 +23,6 @@ func _ready() -> void:
 	@warning_ignore("return_value_discarded")
 	Settings.changed.connect(on_settings_changed)
 
-	base_particles.restart()
-
 	on_settings_changed(&"extra_particle_effects")
 
 func fire(correct: bool, collider_color: Color, collision_point: Vector3, cutplane: Plane, cut_speed: Vector3) -> void:
